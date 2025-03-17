@@ -35,12 +35,39 @@ module.exports.signup = async (req, res, next) => {
     }
 };
 
-module.exports.login = async (req, res) => {
-    req.flash("success", "You are Loggedin!");
-    // let redirectUrl = res.local.redirectUrl || "/annadata";
-    res.redirect("/annadata");
-
-};
+// Convert user login to return JWT instead of setting session
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (!user || !await user.validatePassword(password)) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Invalid email or password' 
+      });
+    }
+    
+    const token = generateJWT(user);
+    
+    return res.status(200).json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message
+    });
+  }
+}
 
 module.exports.logout = (req, res, next) => {
     req.logOut((err) => {

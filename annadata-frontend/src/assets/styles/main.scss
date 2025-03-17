@@ -1,0 +1,34 @@
+// Import variables and mixins
+@import 'variables';
+@import 'mixins';
+
+// Import component styles
+@import 'components/navbar';
+@import 'components/footer';
+@import 'components/flash-message';
+
+// Import page styles
+@import 'pages/home';
+@import 'pages/forum';
+@import 'pages/auth';
+
+// Global styles
+body {
+  font-family: $font-primary;
+  color: $text-color;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  margin-bottom: 1rem;
+}
+
+// Utility classes
+.text-primary {
+  color: $primary-color;
+}
+
+.bg-light {
+  background-color: $light-color;
+}

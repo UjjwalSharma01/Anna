@@ -1,0 +1,83 @@
+import React, { Suspense, lazy } from 'react';
+import { 
+  BrowserRouter as Router, 
+  Routes, Route, 
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider
+} from 'react-router-dom';
+import MainLayout from './layouts/MainLayout.jsx';
+import { FlashProvider } from './context/FlashContext.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { ImageProvider } from './context/ImageContext.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import LoadingSpinner from './components/LoadingSpinner.jsx';
+
+// Import the CSS file
+import './App.css';
+
+// Lazily load page components
+const Home = lazy(() => import('./pages/Home.jsx'));
+const Schemes = lazy(() => import('./pages/Schemes.jsx'));
+const Forum = lazy(() => import('./pages/Forum.jsx'));
+const AskQuestion = lazy(() => import('./pages/AskQuestion.jsx'));
+const QuestionDetail = lazy(() => import('./pages/QuestionDetail.jsx'));
+const Profile = lazy(() => import('./pages/Profile.jsx'));
+const Auth = lazy(() => import('./pages/Auth.jsx'));
+const ErrorPage = lazy(() => import('./pages/ErrorPage.jsx'));
+
+// Create router with future flags enabled
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route
+      path="/"
+      element={
+        <FlashProvider>
+          <AuthProvider>
+            <ImageProvider>
+              <Suspense fallback={<MainLayout><LoadingSpinner /></MainLayout>}>
+                <MainLayout />
+              </Suspense>
+            </ImageProvider>
+          </AuthProvider>
+        </FlashProvider>
+      }
+      errorElement={<MainLayout><ErrorPage /></MainLayout>}
+    >
+      <Route index element={<Home />} />
+      <Route path="schemes" element={<Schemes />} />
+      <Route path="forum" element={<Forum />} />
+      <Route path="forum/:id" element={<QuestionDetail />} />
+      <Route 
+        path="forum/ask" 
+        element={
+          <ProtectedRoute>
+            <AskQuestion />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="profile" 
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } 
+      />
+      <Route path="login" element={<Auth />} />
+    </Route>
+  ),
+  {
+    // Enable future flags to avoid deprecation warnings
+    future: {
+      v7_startTransition: true,
+      v7_relativeSplatPath: true
+    }
+  }
+);
+
+function App() {
+  return <RouterProvider router={router} />;
+}
+
+export default App;
