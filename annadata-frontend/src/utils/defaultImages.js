@@ -1,13 +1,13 @@
 // Default image URLs for use throughout the application
 
-// Add local imports for images
-const baseUrl = '/static/images';
+// Use placeholder images from a reliable external source rather than missing local files
+const placeholderUrl = 'https://placehold.co/600x400?text=';
 
-export const defaultSchemeImage = `${baseUrl}/default-scheme.jpg`;
-export const defaultQuestionImage = `${baseUrl}/default-question.jpg`;
-export const defaultUserImage = `${baseUrl}/default-avatar.jpg`;
-export const defaultAvatarImage = `${baseUrl}/default-avatar.jpg`; 
-export const defaultHeroImage = `${baseUrl}/hero.jpg`;
+export const defaultSchemeImage = `${placeholderUrl}Scheme`;
+export const defaultQuestionImage = `${placeholderUrl}Question`;
+export const defaultUserImage = `${placeholderUrl}User`;
+export const defaultAvatarImage = `${placeholderUrl}Avatar`; 
+export const defaultHeroImage = `${placeholderUrl}AnnadataHero`;
 
 // Remove base64 fallbacks and use actual image paths
 export const fallbackImages = {

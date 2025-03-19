@@ -87,17 +87,18 @@ const Profile = () => {
             <div className="card-body text-center">
               <div className="mb-3">
                 <img
-                  src={user.avatar || defaultAvatarImage}
-                  alt={user.username}
+                  src={user?.avatar || defaultAvatarImage}
+                  alt={user?.username || 'User'}
                   className="rounded-circle img-fluid shadow"
                   style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                   onError={(e) => {
+                    console.log('Avatar load error, using default');
                     e.target.onerror = null;
                     e.target.src = defaultAvatarImage;
                   }}
                 />
               </div>
-              <h5 className="card-title mb-0">{user.username}</h5>
+              <h5 className="card-title mb-0">{user?.username}</h5>
               <p className="text-muted small">Member since {new Date(user.createdAt).toLocaleDateString()}</p>
               <button
                 className="btn btn-outline-success"

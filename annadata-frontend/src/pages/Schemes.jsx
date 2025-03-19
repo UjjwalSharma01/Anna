@@ -125,17 +125,24 @@ const Schemes = () => {
               style={{ animationDelay: `${(index % 6) * 0.1}s` }}
             >
               <div className="card h-100 shadow-sm">
-                {scheme.imageUrl && (
+                {scheme.imageUrl ? (
                   <img
                     src={scheme.imageUrl}
                     className="card-img-top"
                     alt={scheme.title}
                     loading="lazy"
                     onError={(e) => {
-                      console.log('Image load error, using default');
                       e.target.onerror = null; // Prevent infinite loop
                       e.target.src = defaultSchemeImage;
+                      console.log('Using fallback image for scheme:', scheme.title);
                     }}
+                  />
+                ) : (
+                  <img
+                    src={defaultSchemeImage}
+                    className="card-img-top"
+                    alt={scheme.title}
+                    loading="lazy"
                   />
                 )}
                 <div className="card-body">

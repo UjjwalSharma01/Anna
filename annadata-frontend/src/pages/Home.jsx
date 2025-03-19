@@ -3,15 +3,14 @@ import { Link } from 'react-router-dom';
 import { getHomePageData } from '../services/annadataService';
 import { useFlash } from '../context/FlashContext';
 import ConnectionStatus from '../components/ConnectionStatus.jsx';
-import ImageWithFallback from '../components/ImageWithFallback';
-import { defaultHeroImage, fallbackImages } from '../utils/defaultImages';
+import { fallbackImages } from '../utils/defaultImages';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [heroData, setHeroData] = useState({
     title: 'Welcome to Annadata',
-    subtitle: 'Your one-stop platform for agricultural resources and community',
-    imageUrl: defaultHeroImage // Use the base64 image as default
+    subtitle: 'Your one-stop platform for agricultural resources and community'
+    // removed imageUrl from initial state
   });
   const [featuredSchemes, setFeaturedSchemes] = useState([]);
   const [latestQuestions, setLatestQuestions] = useState([]);
@@ -23,10 +22,10 @@ const Home = () => {
         setLoading(true);
         const data = await getHomePageData();
         if (data.hero) {
-          // Keep the default image if no valid image URL is provided
+          // Don't set imageUrl anymore
           setHeroData({
-            ...data.hero,
-            imageUrl: data.hero.imageUrl || defaultHeroImage
+            title: data.hero.title || 'Welcome to Annadata',
+            subtitle: data.hero.subtitle || 'Your one-stop platform for agricultural resources and community'
           });
         }
         if (data.featuredSchemes) setFeaturedSchemes(data.featuredSchemes);
@@ -58,16 +57,16 @@ const Home = () => {
       {/* Connection status indicator */}
       <ConnectionStatus />
       
-      {/* Hero Section */}
+      {/* Hero Section - Modified to remove image */}
       <section 
         className="hero-section py-5 bg-light rounded mb-4 shadow-lg fade-in"
       >
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-md-6">
+            <div className="col-12 text-center">
               <h1 className="display-4 fw-bold text-success">{heroData.title}</h1>
               <p className="lead text-dark">{heroData.subtitle}</p>
-              <div className="d-flex gap-3 mt-4">
+              <div className="d-flex justify-content-center gap-3 mt-4">
                 <Link to="/schemes" className="btn btn-success btn-lg shadow-sm">
                   Explore Schemes
                 </Link>
@@ -75,14 +74,6 @@ const Home = () => {
                   Join Forum
                 </Link>
               </div>
-            </div>
-            <div className="col-md-6">
-              <ImageWithFallback
-                src={heroData.imageUrl}
-                fallbackSrc={fallbackImages.hero}
-                alt="Hero"
-                className="img-fluid rounded shadow"
-              />
             </div>
           </div>
         </div>
