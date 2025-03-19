@@ -33,7 +33,7 @@ const ConnectionStatus = () => {
   if (isOnline && !hasError) return null;
 
   return (
-    <div className="alert alert-warning">
+    <div className="alert alert-warning mb-4">
       {!isOnline ? (
         <span>You are currently offline. Some features may be limited.</span>
       ) : hasError ? (

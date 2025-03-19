@@ -1,28 +1,30 @@
-// Default image URLs for use throughout the application
+/**
+ * Default images for the application
+ */
 
-// Use placeholder images from a reliable external source rather than missing local files
-const placeholderUrl = 'https://placehold.co/600x400?text=';
+// Default profile avatar image
+export const defaultAvatarImage = 'https://res.cloudinary.com/demo/image/upload/v1612376638/samples/people/profile-placeholder.jpg';
 
-export const defaultSchemeImage = `${placeholderUrl}Scheme`;
-export const defaultQuestionImage = `${placeholderUrl}Question`;
-export const defaultUserImage = `${placeholderUrl}User`;
-export const defaultAvatarImage = `${placeholderUrl}Avatar`; 
-export const defaultHeroImage = `${placeholderUrl}AnnadataHero`;
+// Default scheme image when no image is provided
+export const defaultSchemeImage = 'https://res.cloudinary.com/demo/image/upload/v1612376688/samples/landscapes/agriculture-field.jpg';
 
-// Remove base64 fallbacks and use actual image paths
+// Hero section background for home page
+export const heroBackgroundImage = 'https://res.cloudinary.com/demo/image/upload/v1612376705/samples/landscapes/farm-landscape.jpg';
+
+// Fallback images for different categories
 export const fallbackImages = {
   scheme: defaultSchemeImage,
-  question: defaultQuestionImage,
-  user: defaultUserImage,
-  hero: defaultHeroImage,
-  default: defaultHeroImage
+  avatar: defaultAvatarImage,
+  hero: heroBackgroundImage,
+  crop: 'https://res.cloudinary.com/demo/image/upload/v1612376700/samples/food/vegetables.jpg'
 };
 
-export default {
-  defaultSchemeImage,
-  defaultQuestionImage,
-  defaultUserImage,
-  defaultAvatarImage,
-  defaultHeroImage,
-  fallbackImages
+// Export default object for all images
+export const defaultImages = {
+  avatarImage: defaultAvatarImage,
+  schemeImage: defaultSchemeImage,
+  heroBackground: heroBackgroundImage,
+  fallbacks: fallbackImages
 };
+
+export default defaultImages;

@@ -10,6 +10,13 @@ export const useFlash = () => useContext(FlashContext);
 export const FlashProvider = ({ children }) => {
   const [flashMessages, setFlashMessages] = useState([]);
 
+  // Remove a flash message by ID
+  const removeFlash = useCallback((id) => {
+    setFlashMessages(prevMessages => 
+      prevMessages.filter(message => message.id !== id)
+    );
+  }, []);
+
   // Add a new flash message
   const addFlash = useCallback((message, type = 'info', timeout = 5000) => {
     const id = uuidv4();
@@ -25,14 +32,7 @@ export const FlashProvider = ({ children }) => {
     }
     
     return id;
-  }, []);
-
-  // Remove a flash message by ID
-  const removeFlash = useCallback((id) => {
-    setFlashMessages(prevMessages => 
-      prevMessages.filter(message => message.id !== id)
-    );
-  }, []);
+  }, [removeFlash]);
 
   // Clear all flash messages
   const clearFlashes = useCallback(() => {

@@ -1,10 +1,9 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { 
-  BrowserRouter as Router, 
-  Routes, Route, 
   createBrowserRouter,
   createRoutesFromElements,
-  RouterProvider
+  RouterProvider,
+  Route
 } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout.jsx';
 import { FlashProvider } from './context/FlashContext.jsx';
@@ -41,22 +40,29 @@ const BackendStatus = ({ isHealthy, error }) => {
   );
 };
 
+// Create the MainApp component that wraps the layout with context providers
+const MainApp = () => (
+  <FlashProvider>
+    <AuthProvider>
+      <ImageProvider>
+        <Suspense fallback={<div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+            <div className="spinner-border text-success" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>}>
+          <MainLayout />
+        </Suspense>
+      </ImageProvider>
+    </AuthProvider>
+  </FlashProvider>
+);
+
 // Create router with future flags enabled
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
       path="/"
-      element={
-        <FlashProvider>
-          <AuthProvider>
-            <ImageProvider>
-              <Suspense fallback={<MainLayout><LoadingSpinner /></MainLayout>}>
-                <MainLayout />
-              </Suspense>
-            </ImageProvider>
-          </AuthProvider>
-        </FlashProvider>
-      }
+      element={<MainApp />}
       errorElement={<MainLayout><ErrorPage /></MainLayout>}
     >
       <Route index element={<Home />} />

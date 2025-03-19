@@ -29,21 +29,29 @@ export const validatePassword = (password) => {
   const hasUpper = /[A-Z]/.test(password);
   const hasNumber = /[0-9]/.test(password);
   const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  
-  const strength = [hasLower, hasUpper, hasNumber, hasSpecial].filter(Boolean).length;
-  
-  if (strength <= 2) {
-    result.strength = 'weak';
-    result.message = 'Password is too weak';
-    result.valid = false;
-  } else if (strength === 3) {
-    result.strength = 'medium';
-    result.valid = true;
-  } else {
+
+  // Calculate strength based on criteria
+  let strength = 0;
+  if (hasLower) strength++;
+  if (hasUpper) strength++;
+  if (hasNumber) strength++;
+  if (hasSpecial) strength++;
+
+  // Determine strength level
+  if (strength === 4) {
     result.strength = 'strong';
     result.valid = true;
+    result.message = 'Password is strong';
+  } else if (strength >= 2) {
+    result.strength = 'medium';
+    result.valid = true;
+    result.message = 'Password is good, but could be stronger';
+  } else {
+    result.strength = 'weak';
+    result.valid = false;
+    result.message = 'Password is weak. Include uppercase, lowercase, numbers, and special characters.';
   }
-  
+
   return result;
 };
 

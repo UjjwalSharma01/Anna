@@ -1,0 +1,136 @@
+/**
+ * This file provides mock data for the application when the backend is unavailable
+ * Useful in development environments like GitHub Codespaces
+ */
+
+// Mock home page data
+export const mockHomeData = {
+  hero: {
+    title: 'Welcome to Annadata',
+    subtitle: 'Your one-stop platform for agricultural resources and community',
+    description: 'Access agricultural schemes, connect with farmers, and get the resources you need'
+  },
+  featuredSchemes: [
+    {
+      _id: 'scheme1',
+      title: 'PM Kisan Samman Nidhi',
+      description: 'Direct income support of Rs 6000 per year to farmers with landholding up to 2 hectares',
+      category: 'Financial Support',
+      imageUrl: '/images/default.jpg'
+    },
+    {
+      _id: 'scheme2',
+      title: 'Soil Health Card Scheme',
+      description: 'Evaluation of soil fertility and recommending crops and fertilizers for improved yield',
+      category: 'Agricultural Input',
+      imageUrl: '/images/default.jpg'
+    },
+    {
+      _id: 'scheme3',
+      title: 'Pradhan Mantri Fasal Bima Yojana',
+      description: 'Crop insurance scheme to protect farmers against crop failure',
+      category: 'Insurance',
+      imageUrl: '/images/default.jpg'
+    }
+  ],
+  latestQuestions: [
+    {
+      _id: 'q1',
+      title: 'What are the best practices for organic farming?',
+      content: 'I want to transition to organic farming. What are the best practices and challenges I should be aware of?',
+      author: { username: 'farmer123', avatar: '' },
+      createdAt: new Date().toISOString(),
+      upvotes: 12,
+      answers: []
+    },
+    {
+      _id: 'q2',
+      title: 'How to control pests without chemicals?',
+      content: 'I am looking for natural ways to control pests in my vegetable garden without using chemicals.',
+      author: { username: 'organicGrower', avatar: '' },
+      createdAt: new Date().toISOString(),
+      upvotes: 8,
+      answers: []
+    }
+  ]
+};
+
+// Mock schemes data
+export const mockSchemes = {
+  schemes: [
+    {
+      _id: 'scheme1',
+      title: 'PM Kisan Samman Nidhi',
+      description: 'Direct income support of Rs 6000 per year to farmers with landholding up to 2 hectares',
+      category: 'Financial Support',
+      imageUrl: '/images/default.jpg',
+      eligibility: 'All farmers with land holdings up to 2 hectares',
+      benefits: '₹6000 per year in three equal installments',
+      featured: true
+    },
+    {
+      _id: 'scheme2',
+      title: 'Soil Health Card Scheme',
+      description: 'Evaluation of soil fertility and recommending crops and fertilizers for improved yield',
+      category: 'Agricultural Input',
+      imageUrl: '/images/default.jpg',
+      eligibility: 'All farmers',
+      benefits: 'Improved soil health and crop yield',
+      featured: true
+    },
+    {
+      _id: 'scheme3',
+      title: 'Pradhan Mantri Fasal Bima Yojana',
+      description: 'Crop insurance scheme to protect farmers against crop failure',
+      category: 'Insurance',
+      imageUrl: '/images/default.jpg',
+      eligibility: 'All farmers growing notified crops',
+      benefits: 'Insurance coverage for crop loss',
+      featured: true
+    },
+    {
+      _id: 'scheme4',
+      title: 'Kisan Credit Card',
+      description: 'Credit facility for farmers to meet their agricultural needs',
+      category: 'Financial Support',
+      imageUrl: '/images/default.jpg',
+      eligibility: 'All farmers and agricultural laborers',
+      benefits: 'Easy access to credit for agricultural needs',
+      featured: false
+    }
+  ]
+};
+
+// Mock forum data
+export const mockForumData = {
+  questions: [
+    {
+      _id: 'q1',
+      title: 'What are the best practices for organic farming?',
+      content: 'I want to transition to organic farming. What are the best practices and challenges I should be aware of?',
+      author: { username: 'farmer123', avatar: '' },
+      createdAt: new Date().toISOString(),
+      upvotes: 12,
+      answers: [],
+      tags: ['organic', 'farming', 'best-practices']
+    },
+    {
+      _id: 'q2',
+      title: 'How to control pests without chemicals?',
+      content: 'I am looking for natural ways to control pests in my vegetable garden without using chemicals.',
+      author: { username: 'organicGrower', avatar: '' },
+      createdAt: new Date().toISOString(),
+      upvotes: 8,
+      answers: [],
+      tags: ['pests', 'organic', 'vegetables']
+    }
+  ],
+  totalPages: 1,
+  page: 1
+};
+
+export default {
+  homeData: mockHomeData,
+  schemes: mockSchemes,
+  forum: mockForumData
+};

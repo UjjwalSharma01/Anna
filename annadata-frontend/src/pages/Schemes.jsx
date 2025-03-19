@@ -55,7 +55,7 @@ const Schemes = () => {
 
   // Filter schemes based on search and category
   const filteredSchemes = schemes.filter(scheme => {
-    const matchesSearch = scheme.title.toLowerCase().includes(filter.toLowerCase()) || 
+    const matchesSearch = scheme.title?.toLowerCase().includes(filter.toLowerCase()) || 
                         (scheme.description && scheme.description.toLowerCase().includes(filter.toLowerCase()));
     const matchesCategory = selectedCategory === '' || scheme.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -87,7 +87,7 @@ const Schemes = () => {
   }
 
   return (
-    <div className="schemes-page">
+    <div className="schemes-page container">
       <div className="fade-in">
         <h1 className="mb-4 border-bottom border-success pb-2">Agricultural Schemes</h1>
         
@@ -131,10 +131,10 @@ const Schemes = () => {
                     className="card-img-top"
                     alt={scheme.title}
                     loading="lazy"
+                    style={{height: '160px', objectFit: 'cover'}}
                     onError={(e) => {
                       e.target.onerror = null; // Prevent infinite loop
                       e.target.src = defaultSchemeImage;
-                      console.log('Using fallback image for scheme:', scheme.title);
                     }}
                   />
                 ) : (
@@ -143,6 +143,7 @@ const Schemes = () => {
                     className="card-img-top"
                     alt={scheme.title}
                     loading="lazy"
+                    style={{height: '160px', objectFit: 'cover'}}
                   />
                 )}
                 <div className="card-body">
@@ -153,8 +154,8 @@ const Schemes = () => {
                     )}
                   </h6>
                   <p className="card-text">
-                    {scheme.description?.length > 150
-                      ? `${scheme.description.substring(0, 150)}...`
+                    {scheme.description?.length > 120
+                      ? `${scheme.description.substring(0, 120)}...`
                       : scheme.description}
                   </p>
                 </div>

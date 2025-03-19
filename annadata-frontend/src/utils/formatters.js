@@ -24,10 +24,9 @@ export const formatDate = (dateString, options = {}) => {
  */
 export const timeAgo = (dateString) => {
   const date = new Date(dateString);
-  const now = new Date();
-  const seconds = Math.floor((now - date) / 1000);
-  
+  const seconds = Math.floor((new Date() - date) / 1000);
   let interval = Math.floor(seconds / 31536000);
+  
   if (interval > 1) {
     return `${interval} years ago`;
   } else if (interval === 1) {

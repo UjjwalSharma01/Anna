@@ -41,10 +41,10 @@ const FlashMessages = ({ messages = [], onCloseMessage }) => {
   if (!messages || messages.length === 0) return null;
   
   return (
-    <div className="flash-messages container mt-3">
+    <div className="flash-messages mb-3">
       {messages.map((msg, index) => (
         <FlashMessage 
-          key={index}
+          key={msg.id || index}
           message={msg.message}
           type={msg.type}
           onClose={() => onCloseMessage && onCloseMessage(index)}

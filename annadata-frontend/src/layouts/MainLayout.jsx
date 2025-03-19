@@ -2,29 +2,34 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
-import { FlashMessages } from '../components/FlashMessage.jsx';
 import { useFlash } from '../context/FlashContext.jsx';
+import { FlashMessages } from '../components/FlashMessage.jsx';
 
-const MainLayout = ({ children }) => {
-  const { flashMessages, removeFlash } = useFlash();
+const MainLayout = () => {
+  // Use optional chaining to prevent the error when useFlash returns undefined
+  const flash = useFlash();
   
-  // Use either children passed as prop or Outlet from React Router
-  const content = children || <Outlet />;
-
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navbar />
       
-      <div className="container mt-4 mb-4">
-        <FlashMessages 
-          messages={flashMessages} 
-          onCloseMessage={removeFlash}
-        />
-        
-        <main className="py-4 flex-grow-1 fade-in">
-          {content}
-        </main>
+      {/* Safe access to flashMessages using optional chaining */}
+      <div className="flash-container container mt-3">
+        {flash?.flashMessages && flash.flashMessages.length > 0 && (
+          <FlashMessages 
+            messages={flash.flashMessages} 
+            onCloseMessage={(index) => {
+              if (flash.removeFlash && flash.flashMessages[index]) {
+                flash.removeFlash(flash.flashMessages[index].id);
+              }
+            }} 
+          />
+        )}
       </div>
+      
+      <main className="container py-4 flex-grow-1">
+        <Outlet />
+      </main>
       
       <Footer />
     </div>

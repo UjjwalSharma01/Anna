@@ -6,7 +6,10 @@ import { useFlash } from '../context/FlashContext.jsx';
 
 const QuestionDetail = () => {
   const { id } = useParams();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, 
+    // eslint-disable-next-line no-unused-vars
+    user 
+  } = useAuth();
   const { addFlash } = useFlash();
   const navigate = useNavigate();
   

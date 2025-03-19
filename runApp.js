@@ -11,6 +11,30 @@ dotenv.config();
 // Note: MongoDB URI is now hardcoded in backend/server.js
 console.log('📝 Note: Using hardcoded MongoDB connection string in backend/server.js');
 
+// Check for required dependencies
+const installDependencies = async () => {
+  console.log('🔍 Checking for required dependencies...');
+  
+  const backendDir = path.join(__dirname, 'annadata-frontend', 'backend');
+  
+  // Install backend dependencies
+  const install = spawn('npm', ['install', 'bcryptjs', 'jsonwebtoken', 'express', 'mongoose', 'cors', 'dotenv'], {
+    cwd: backendDir,
+    stdio: 'inherit'
+  });
+  
+  return new Promise((resolve) => {
+    install.on('close', (code) => {
+      if (code === 0) {
+        console.log('✅ Dependencies installed successfully');
+      } else {
+        console.warn('⚠️ Dependency installation completed with code:', code);
+      }
+      resolve();
+    });
+  });
+};
+
 // Function to check if a port is in use
 const isPortInUse = async (port) => {
   return new Promise((resolve) => {
@@ -87,6 +111,9 @@ const startFrontend = () => {
 
 // Main function to start both servers
 const startApplication = async () => {
+  // Install dependencies first
+  await installDependencies();
+  
   // Start backend first
   const backendProcess = await startBackend();
   

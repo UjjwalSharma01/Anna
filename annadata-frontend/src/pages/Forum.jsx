@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getQuestions, searchQuestions, upvoteQuestion } from '../services/forumService';
+import { 
+  getQuestions,
+  upvoteQuestion, // Add this import
+  // eslint-disable-next-line no-unused-vars
+  searchQuestions  // Keep but disable ESLint warning as this might be used in the future
+} from '../services/forumService';
 import { useAuth } from '../context/AuthContext';
 import { useFlash } from '../context/FlashContext';
 

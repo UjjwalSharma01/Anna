@@ -1,7 +1,28 @@
 import axios from 'axios';
 
-// Determine API base URL from environment or use a fallback
-const API_URL = process.env.REACT_APP_API_URL || '/api';
+// Detect GitHub Codespaces environment
+const isGitHubEnvironment = !!process.env.CODESPACE_NAME || 
+  window.location.hostname.includes('github.dev') || 
+  window.location.hostname.includes('app.github.dev');
+
+// Determine API base URL for different environments
+const getApiBaseUrl = () => {
+  if (isGitHubEnvironment) {
+    // In GitHub environment, prepend port to the base URL
+    const port = '5050'; // The port your backend runs on
+    const baseUrl = window.location.origin;
+    // Replace the port in the URL
+    const urlParts = baseUrl.split(':');
+    if (urlParts.length > 2) {
+      return `${urlParts[0]}:${urlParts[1]}:${port}/api`;
+    }
+    return `/api`; // Fallback to relative path
+  }
+  return process.env.REACT_APP_API_URL || '/api';
+};
+
+const API_URL = getApiBaseUrl();
+console.log('API URL configured as:', API_URL);
 
 // Create an axios instance with defaults
 const api = axios.create({
@@ -10,7 +31,7 @@ const api = axios.create({
     'Content-Type': 'application/json'
   },
   // Add timeout to prevent long-hanging requests
-  timeout: 10000
+  timeout: 7000
 });
 
 // Add token to requests if it exists
@@ -36,7 +57,8 @@ api.interceptors.response.use(
       console.error('Network or server error:', error.message);
       return Promise.reject({
         message: 'Network error - please check your connection or the server may be down',
-        original: error
+        original: error,
+        isNetworkError: true
       });
     }
 
@@ -74,10 +96,8 @@ const handleApiError = (error) => {
     error.message || 
     'An unexpected error occurred';
     
-  return { message };
+  return { message, isNetworkError: error.isNetworkError };
 };
 
 // Export both the configured axios instance and the error handler
-export { api, handleApiError };
-
-export default api;
+export { api, handleApiError, isGitHubEnvironment };

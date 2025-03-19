@@ -1,11 +1,26 @@
-import { api, handleApiError } from './apiConfig';
+import { api, handleApiError, isGitHubEnvironment } from './apiConfig';
+import mockData from '../utils/mockData';
+
+// Flag for enabling mock data in development
+const useMockData = process.env.REACT_APP_USE_MOCK_DATA === 'true' || isGitHubEnvironment;
 
 // Forum API functions
 export const getAllQuestions = async (filters = {}) => {
   try {
+    if (useMockData) {
+      console.log('Using mock forum data');
+      return mockData.forum;
+    }
+    
     const response = await api.get('/forum/questions', { params: filters });
     return response.data;
   } catch (error) {
+    // Use mock data as fallback if it's a network error
+    if (error.isNetworkError && useMockData) {
+      console.log('Network error, falling back to mock forum data');
+      return mockData.forum;
+    }
+    
     throw handleApiError(error);
   }
 };
