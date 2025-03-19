@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getQuestionById, answerQuestion, upvoteQuestion, upvoteAnswer } from '../services/forumService.jsx';
-import { useAuth } from '../context/AuthContext.jsx';
-import { useFlash } from '../context/FlashContext.jsx';
+// Use the bridge instead of direct import to get locally cached questions
+import { getQuestionById, answerQuestion, upvoteQuestion, upvoteAnswer } from '../utils/forumBridge';
+import { useAuth } from '../context/AuthContext';
+import { useFlash } from '../context/FlashContext';
 
 const QuestionDetail = () => {
   const { id } = useParams();
@@ -22,9 +23,12 @@ const QuestionDetail = () => {
     const fetchQuestion = async () => {
       try {
         setLoading(true);
+        console.log("[QUESTION DETAIL] Fetching question with ID:", id);
         const data = await getQuestionById(id);
+        console.log("[QUESTION DETAIL] Received question data:", JSON.stringify(data));
         setQuestion(data);
       } catch (error) {
+        console.error("[QUESTION DETAIL] Error fetching question:", error);
         addFlash(error.message || 'Failed to load question details', 'danger');
         navigate('/forum');
       } finally {
@@ -41,9 +45,12 @@ const QuestionDetail = () => {
     }
 
     try {
+      console.log("[QUESTION DETAIL] Upvoting question:", id);
       const response = await upvoteQuestion(id);
+      console.log("[QUESTION DETAIL] Upvote response:", response);
       setQuestion(prev => ({ ...prev, upvotes: response.upvotes }));
     } catch (error) {
+      console.error("[QUESTION DETAIL] Upvote error:", error);
       addFlash(error.message || 'Failed to upvote question', 'danger');
     }
   };
@@ -54,7 +61,9 @@ const QuestionDetail = () => {
     }
 
     try {
+      console.log("[QUESTION DETAIL] Upvoting answer:", answerId);
       const response = await upvoteAnswer(id, answerId);
+      console.log("[QUESTION DETAIL] Answer upvote response:", response);
       setQuestion(prev => ({
         ...prev,
         answers: prev.answers.map(ans => 
@@ -62,6 +71,7 @@ const QuestionDetail = () => {
         )
       }));
     } catch (error) {
+      console.error("[QUESTION DETAIL] Answer upvote error:", error);
       addFlash(error.message || 'Failed to upvote answer', 'danger');
     }
   };
@@ -74,9 +84,12 @@ const QuestionDetail = () => {
     }
     
     setSubmitting(true);
+    console.log("[QUESTION DETAIL] Submitting answer for question:", id);
     
     try {
       const response = await answerQuestion(id, { content: answerText });
+      console.log("[QUESTION DETAIL] Answer submission response:", response);
+      
       setQuestion(prev => ({
         ...prev,
         answers: [...(prev.answers || []), response]
@@ -84,6 +97,7 @@ const QuestionDetail = () => {
       setAnswerText('');
       addFlash('Your answer has been posted', 'success');
     } catch (error) {
+      console.error("[QUESTION DETAIL] Answer submission error:", error);
       addFlash(error.message || 'Failed to post your answer', 'danger');
     } finally {
       setSubmitting(false);

@@ -17,6 +17,8 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .form-control:focus, .form-select:focus {
@@ -502,11 +504,17 @@ body {
   border-radius: 10px;
   padding: 3rem 1rem;
   text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.5rem !important;
 }
 
 .featured-schemes .row,
 .latest-questions .list-group {
   margin-top: 1.5rem;
+}
+
+.home-page section {
+  margin-bottom: 3rem;
 }
 
 /* Section headings */
@@ -516,6 +524,7 @@ h2.section-heading {
   position: relative;
   padding-left: 1rem;
   border-left: 4px solid #4CAF50;
+  clear: both;
 }
 
 /* Mobile responsiveness improvements */
@@ -535,6 +544,11 @@ h2.section-heading {
   
   .home-page .hero-section {
     padding: 2rem 1rem;
+  }
+  
+  h1.display-4 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -618,4 +632,59 @@ main.container {
 /* Remove extra top margin from the contact column in the footer */
 .contact-column {
   margin-top: 0 !important;
+}
+
+/* Fix for image errors */
+.card-img-top {
+  background-color: #f8f9fa; /* Light background for cards with missing images */
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d; /* Text color for fallback */
+}
+
+.card-img-top::before {
+  content: attr(alt); /* Show alt text if image fails */
+  display: none;
+}
+
+.card-img-top:not([src]), 
+.card-img-top[src=""], 
+.card-img-top[src="null"], 
+.card-img-top[src="undefined"] {
+  position: relative;
+}
+
+.card-img-top:not([src])::before, 
+.card-img-top[src=""]::before, 
+.card-img-top[src="null"]::before, 
+.card-img-top[src="undefined"]::before {
+  display: block;
+}
+
+/* Fix for image loading issues */
+.card-img-container {
+  position: relative;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-container::before {
+  content: attr(data-title);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #6c757d;
+  font-size: 0.9rem;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.card-img-top {
+  position: relative;
+  z-index: 1;
 }

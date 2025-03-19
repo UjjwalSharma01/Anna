@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  getQuestions,
-  upvoteQuestion, // Add this import
-  // eslint-disable-next-line no-unused-vars
-  searchQuestions  // Keep but disable ESLint warning as this might be used in the future
-} from '../services/forumService';
+// Use the enhanced forum bridge instead of serviceHelper directly
+import { getQuestions, upvoteQuestion } from '../utils/forumBridge';
 import { useAuth } from '../context/AuthContext';
 import { useFlash } from '../context/FlashContext';
 
@@ -27,18 +23,72 @@ const Forum = () => {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
+        console.log('Fetching forum questions, page:', currentPage);
+        
+        // Use the forum bridge getQuestions which includes locally created questions
         const response = await getQuestions(currentPage, pageSize);
-        setQuestions(response.questions || []);
-        setTotalPages(response.totalPages || 1);
+        console.log('Got forum response:', response);
+        
+        // Handle the response - be extra careful about structure
+        if (!response) {
+          // No response at all
+          console.warn('No response received from getQuestions');
+          setQuestions([]);
+          setTotalPages(1);
+          return;
+        }
+        
+        if (Array.isArray(response)) {
+          // Direct array of questions
+          console.log('Response is an array of questions');
+          setQuestions(response);
+          setTotalPages(1);
+        } 
+        else if (response.questions && Array.isArray(response.questions)) {
+          // Object with questions array
+          console.log('Response has questions array property');
+          setQuestions(response.questions);
+          setTotalPages(response.totalPages || 1);
+        }
+        else {
+          // Unexpected format - try to handle anything
+          console.warn('Unexpected response format - attempting to handle');
+          let extractedQuestions = [];
+          
+          // Try several ways to extract questions
+          if (typeof response === 'object') {
+            if (Object.keys(response).length > 0) {
+              // Try to find an array property that might be questions
+              const arrayProps = Object.values(response).filter(val => Array.isArray(val));
+              if (arrayProps.length > 0) {
+                extractedQuestions = arrayProps[0];
+              } else {
+                // Last resort - treat the object itself as a question
+                extractedQuestions = [response];
+              }
+            }
+          }
+          
+          setQuestions(extractedQuestions);
+          setTotalPages(1);
+        }
       } catch (error) {
-        addFlash(error.message || 'Failed to load forum questions', 'danger');
+        console.error('Final forum fetch error:', error);
+        // Don't show an error message - just use empty state
+        setQuestions([]);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
     };
 
     fetchQuestions();
-  }, [currentPage, addFlash]);
+    
+    // Reset the refresh flag
+    if (typeof window !== 'undefined') {
+      window.__FORUM_QUESTIONS_NEED_REFRESH = false;
+    }
+  }, [currentPage, addFlash, pageSize]);
 
   const handleUpvote = async (questionId, event) => {
     event.preventDefault();
@@ -50,7 +100,9 @@ const Forum = () => {
     }
 
     try {
+      // Use the direct upvoteQuestion function from forumBridge
       const response = await upvoteQuestion(questionId);
+      
       // Update the question with new upvote count
       setQuestions(prevQuestions => 
         prevQuestions.map(q => 

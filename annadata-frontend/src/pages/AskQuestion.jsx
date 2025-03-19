@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { askQuestion } from '../services/forumService';
+// Use the bridge module for reliable access to the askQuestion function
+import { askQuestion } from '../utils/forumBridge';
 import { useFlash } from '../context/FlashContext';
 
 const AskQuestion = () => {
@@ -31,15 +32,47 @@ const AskQuestion = () => {
       : [];
 
     setLoading(true);
+    console.log('[ASK QUESTION] Submitting question with data:', {...formData, tags: tagsArray});
 
     try {
+      // Use the askQuestion function which will save to MongoDB if available
       const response = await askQuestion({ 
         ...formData,
         tags: tagsArray
       });
+      
+      console.log('[ASK QUESTION] Question posted successfully:', response);
+      
+      // Ensure question data is available in global state for other components
+      if (typeof window !== 'undefined') {
+        try {
+          // Store in global cache for question details page
+          if (!window.__QUESTION_BY_ID_CACHE) window.__QUESTION_BY_ID_CACHE = {};
+          window.__QUESTION_BY_ID_CACHE[response._id] = response;
+          console.log('[ASK QUESTION] Question cached globally');
+          
+          // Also add to service registry
+          if (window.__FORUM_SERVICE_REGISTRY && window.__FORUM_SERVICE_REGISTRY.getQuestionById) {
+            const originalFn = window.__FORUM_SERVICE_REGISTRY.getQuestionById;
+            window.__FORUM_SERVICE_REGISTRY.getQuestionById = async (id) => {
+              console.log('[ASK QUESTION] Custom getQuestionById called for id:', id);
+              if (id === response._id) {
+                console.log('[ASK QUESTION] Returning cached question');
+                return response;
+              }
+              return originalFn(id);
+            };
+            console.log('[ASK QUESTION] Question getter function patched');
+          }
+        } catch (cacheError) {
+          console.warn('[ASK QUESTION] Failed to cache question:', cacheError);
+        }
+      }
+      
       addFlash('Question posted successfully!', 'success');
       navigate(`/forum/${response._id}`);
     } catch (error) {
+      console.error('[ASK QUESTION] Error posting question:', error);
       addFlash(error.message || 'Failed to post question', 'danger');
       setLoading(false);
     }

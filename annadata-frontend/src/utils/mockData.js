@@ -2,6 +2,7 @@
  * This file provides mock data for the application when the backend is unavailable
  * Useful in development environments like GitHub Codespaces
  */
+import { defaultSchemeImage, schemeTypeImages } from './defaultImages';
 
 // Mock home page data
 export const mockHomeData = {
@@ -16,21 +17,21 @@ export const mockHomeData = {
       title: 'PM Kisan Samman Nidhi',
       description: 'Direct income support of Rs 6000 per year to farmers with landholding up to 2 hectares',
       category: 'Financial Support',
-      imageUrl: '/images/default.jpg'
+      imageUrl: schemeTypeImages['Financial Support'] || defaultSchemeImage
     },
     {
       _id: 'scheme2',
       title: 'Soil Health Card Scheme',
       description: 'Evaluation of soil fertility and recommending crops and fertilizers for improved yield',
       category: 'Agricultural Input',
-      imageUrl: '/images/default.jpg'
+      imageUrl: schemeTypeImages['Agricultural Input'] || defaultSchemeImage
     },
     {
       _id: 'scheme3',
       title: 'Pradhan Mantri Fasal Bima Yojana',
       description: 'Crop insurance scheme to protect farmers against crop failure',
       category: 'Insurance',
-      imageUrl: '/images/default.jpg'
+      imageUrl: schemeTypeImages['Insurance'] || defaultSchemeImage
     }
   ],
   latestQuestions: [
@@ -63,7 +64,7 @@ export const mockSchemes = {
       title: 'PM Kisan Samman Nidhi',
       description: 'Direct income support of Rs 6000 per year to farmers with landholding up to 2 hectares',
       category: 'Financial Support',
-      imageUrl: '/images/default.jpg',
+      imageUrl: schemeTypeImages['Financial Support'] || defaultSchemeImage,
       eligibility: 'All farmers with land holdings up to 2 hectares',
       benefits: '₹6000 per year in three equal installments',
       featured: true
@@ -73,7 +74,7 @@ export const mockSchemes = {
       title: 'Soil Health Card Scheme',
       description: 'Evaluation of soil fertility and recommending crops and fertilizers for improved yield',
       category: 'Agricultural Input',
-      imageUrl: '/images/default.jpg',
+      imageUrl: schemeTypeImages['Agricultural Input'] || defaultSchemeImage,
       eligibility: 'All farmers',
       benefits: 'Improved soil health and crop yield',
       featured: true
@@ -83,7 +84,7 @@ export const mockSchemes = {
       title: 'Pradhan Mantri Fasal Bima Yojana',
       description: 'Crop insurance scheme to protect farmers against crop failure',
       category: 'Insurance',
-      imageUrl: '/images/default.jpg',
+      imageUrl: schemeTypeImages['Insurance'] || defaultSchemeImage,
       eligibility: 'All farmers growing notified crops',
       benefits: 'Insurance coverage for crop loss',
       featured: true
@@ -93,7 +94,7 @@ export const mockSchemes = {
       title: 'Kisan Credit Card',
       description: 'Credit facility for farmers to meet their agricultural needs',
       category: 'Financial Support',
-      imageUrl: '/images/default.jpg',
+      imageUrl: schemeTypeImages['Financial Support'] || defaultSchemeImage,
       eligibility: 'All farmers and agricultural laborers',
       benefits: 'Easy access to credit for agricultural needs',
       featured: false
