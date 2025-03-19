@@ -108,6 +108,22 @@ body {
   }
 }
 
+/* Backend Status Alert */
+.backend-status-alert {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  max-width: 350px;
+  z-index: 1050;
+  animation: fadeIn 0.3s ease-in;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Profile page specific styles */
 .profile-page .card {
   margin-bottom: 1.5rem;
