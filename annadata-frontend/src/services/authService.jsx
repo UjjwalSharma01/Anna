@@ -36,6 +36,7 @@ const handleApiError = (error) => {
 
 export const login = async (credentials) => {
   try {
+    // Updated to use all credentials (username, email, password)
     const response = await axios.post(`${API_URL}/auth/login`, credentials);
     return response.data;
   } catch (error) {
@@ -45,6 +46,8 @@ export const login = async (credentials) => {
 
 export const signup = async (userData) => {
   try {
+    // Now userData will contain all fields from the EJS form:
+    // username, email, password, location, land_area, income
     const response = await api.post('/users/register', userData);
     return response.data;
   } catch (error) {

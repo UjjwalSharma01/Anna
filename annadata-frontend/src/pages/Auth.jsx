@@ -8,18 +8,22 @@ const Auth = () => {
   const [activeTab, setActiveTab] = useState('login');
   const [loading, setLoading] = useState(false);
   
-  // Login form state
+  // Login form state - updated to match EJS form fields
   const [loginData, setLoginData] = useState({
     username: '',
+    email: '',  // Added email field to match EJS login form
     password: ''
   });
   
-  // Register form state
+  // Register form state - updated to match EJS form fields
   const [registerData, setRegisterData] = useState({
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    location: '',  // Added to match EJS signup form
+    land_area: '',  // Added to match EJS signup form
+    income: ''  // Added to match EJS signup form
   });
   
   const { login: authLogin, signup: authSignup } = useAuth();
@@ -45,7 +49,8 @@ const Auth = () => {
     setLoading(true);
     
     try {
-      const response = await login(loginData.username, loginData.password);
+      // Updated to pass all required fields
+      const response = await login(loginData);
       authLogin(response.token);
       navigate(from, { replace: true });
     } catch (error) {
@@ -66,7 +71,9 @@ const Auth = () => {
     setLoading(true);
     
     try {
-      const response = await signup(registerData);
+      // Remove confirmPassword as it's not needed in the API
+      const { confirmPassword, ...signupData } = registerData;
+      const response = await signup(signupData);
       authSignup(response.token);
       navigate(from, { replace: true });
     } catch (error) {
@@ -113,6 +120,18 @@ const Auth = () => {
                       id="username"
                       name="username"
                       value={loginData.username}
+                      onChange={handleLoginChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="login-email" className="form-label">Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="login-email"
+                      name="email"
+                      value={loginData.email}
                       onChange={handleLoginChange}
                       required
                     />
@@ -192,6 +211,39 @@ const Auth = () => {
                       value={registerData.confirmPassword}
                       onChange={handleRegisterChange}
                       required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="location" className="form-label">Location</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="location"
+                      name="location"
+                      value={registerData.location}
+                      onChange={handleRegisterChange}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="land_area" className="form-label">Land Area</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="land_area"
+                      name="land_area"
+                      value={registerData.land_area}
+                      onChange={handleRegisterChange}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="income" className="form-label">Income</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="income"
+                      name="income"
+                      value={registerData.income}
+                      onChange={handleRegisterChange}
                     />
                   </div>
                   <button
