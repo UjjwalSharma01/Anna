@@ -1,54 +1,48 @@
-import React, { createContext, useState, useContext, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-// Create context
-const FlashContext = createContext();
+const FlashContext = createContext({
+  messages: [],
+  addFlash: () => {},
+  removeFlash: () => {},
+});
 
-// Custom hook to use flash context
-export const useFlash = () => useContext(FlashContext);
+export const useFlash = () => {
+  return useContext(FlashContext);
+};
 
 export const FlashProvider = ({ children }) => {
-  const [flashMessages, setFlashMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
 
-  // Remove a flash message by ID
-  const removeFlash = useCallback((id) => {
-    setFlashMessages(prevMessages => 
-      prevMessages.filter(message => message.id !== id)
-    );
-  }, []);
-
-  // Add a new flash message
   const addFlash = useCallback((message, type = 'info', timeout = 5000) => {
     const id = uuidv4();
-    const newFlash = { id, message, type };
-    
-    setFlashMessages(prevMessages => [...prevMessages, newFlash]);
-    
-    // Auto remove after timeout
-    if (timeout > 0) {
+    setMessages(prevMessages => [...prevMessages, { id, message, type }]);
+
+    if (timeout) {
       setTimeout(() => {
         removeFlash(id);
       }, timeout);
     }
-    
-    return id;
-  }, [removeFlash]);
 
-  // Clear all flash messages
-  const clearFlashes = useCallback(() => {
-    setFlashMessages([]);
+    return id;
   }, []);
 
-  const value = {
-    flashMessages,
+  const removeFlash = useCallback((id) => {
+    setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
+  }, []);
+
+  // Ensure we always return valid values in the context
+  const contextValue = {
+    messages,
     addFlash,
     removeFlash,
-    clearFlashes
   };
 
   return (
-    <FlashContext.Provider value={value}>
+    <FlashContext.Provider value={contextValue}>
       {children}
     </FlashContext.Provider>
   );
 };
+
+export default FlashContext;

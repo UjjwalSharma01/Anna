@@ -1,57 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useFlash } from '../context/FlashContext';
 
-// This component will display success, error, or info messages
-const FlashMessage = ({ message, type, onClose }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  // Auto-dismiss flash messages after 5 seconds
+export const FlashMessage = ({ message, type, onClose }) => {
   useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-        if (onClose) onClose();
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [message, onClose]);
-
-  if (!message || !isVisible) return null;
+    const timer = setTimeout(() => {
+      if (onClose) onClose();
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
 
   const alertClass = `alert alert-${type || 'info'} alert-dismissible fade show`;
-  
+
   return (
     <div className={alertClass} role="alert">
       {message}
-      <button 
-        type="button" 
-        className="btn-close" 
-        aria-label="Close"
-        onClick={() => {
-          setIsVisible(false);
-          if (onClose) onClose();
-        }}
-      ></button>
+      <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
     </div>
   );
 };
 
-// This is a wrapper to handle multiple flash messages
-const FlashMessages = ({ messages = [], onCloseMessage }) => {
-  if (!messages || messages.length === 0) return null;
+export const FlashMessages = () => {
+  const { messages = [], removeFlash } = useFlash() || {};
+  
+  // If flash context is not available or messages is undefined, render nothing
+  if (!Array.isArray(messages)) {
+    return null;
+  }
   
   return (
-    <div className="flash-messages mb-3">
-      {messages.map((msg, index) => (
+    <div className="flash-container position-fixed top-0 start-50 translate-middle-x mt-3" style={{ zIndex: 1050, width: '90%', maxWidth: '500px' }}>
+      {messages.map((msg) => (
         <FlashMessage 
-          key={msg.id || index}
-          message={msg.message}
-          type={msg.type}
-          onClose={() => onCloseMessage && onCloseMessage(index)}
+          key={msg?.id || Math.random()}
+          message={msg?.message || 'Unknown message'}
+          type={msg?.type || 'info'}
+          onClose={() => removeFlash && removeFlash(msg?.id)}
         />
       ))}
     </div>
   );
 };
-
-export { FlashMessage, FlashMessages };
