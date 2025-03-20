@@ -1,5 +1,4 @@
 import { api, handleApiError, isGitHubEnvironment } from './apiConfig';
-import mockData from '../utils/mockData';
 
 // Flag for enabling mock data in development
 const useMockData = process.env.REACT_APP_USE_MOCK_DATA === 'true' || isGitHubEnvironment;

@@ -17,31 +17,98 @@
   height: 3rem;
 }
 
-/* Hero Section */
+/* Hero Section - Fixed for particles */
 .hero-section {
   background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
   padding: 80px 0 100px;
   position: relative;
   overflow: hidden;
+  min-height: 600px;
+  z-index: 0; 
 }
 
+/* Ensure content appears above canvas with correct stacking */
+.hero-section .container {
+  position: relative;
+  z-index: 5; /* Above particles */
+}
+
+/* Hero wave - ensure proper stacking */
 .hero-wave {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   line-height: 0;
-  transform: translateY(1px); /* Ensure no gap */
+  transform: translateY(1px);
+  z-index: 3; /* Above particles but below content */
 }
 
-.hero-content h1 {
-  background: linear-gradient(90deg, #2E7D32 0%, #4CAF50 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
+/* Improved particles container styling */
+.particles-bg-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.particles-container-wrapper {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.particles-canvas {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+/* Particles container - improved positioning and z-index */
+.particles-container {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none; /* Allow clicks to pass through to content */
+}
+
+/* Force absolute positioning for particles container */
+.particles-js-container, 
+.particles-bg-container,
+.particles-container-wrapper,
+[id^="particles-container-"],
+[id^="particles-js-container-"],
+[id^="emergency-particles-"] {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Force canvas to be visible */
+canvas[data-generated="true"] {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
 }
 
 /* Stats Section */
@@ -198,4 +265,20 @@
 
 .swiper-button-next, .swiper-button-prev {
   color: #4CAF50;
+}
+
+/* Particle background container - keep separate from other styles */
+.particles-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+/* Ensure the container is properly sized and positioned */
+#tsparticles {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }

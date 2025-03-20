@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getHomePageData } from '../services/annadataService';
 import { useFlash } from '../context/FlashContext';
 import ConnectionStatus from '../components/ConnectionStatus.jsx';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaArrowRight, FaLeaf, FaUsers, FaFileAlt, FaSeedling } from 'react-icons/fa';
+import { FaArrowRight, FaUsers, FaFileAlt, FaSeedling } from 'react-icons/fa';
 import { HiLightningBolt, HiOutlineChatAlt, HiChartBar } from 'react-icons/hi';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
@@ -12,12 +12,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Pagination, Navigation } from 'swiper';
 import Lottie from 'lottie-react';
 import AOS from 'aos';
-import Particles from 'react-particles';
-import { loadSlim } from 'tsparticles-slim';
+import ParticlesBackground from '../components/ParticlesBackground';
 import { defaultSchemeImage } from '../utils/defaultImages';
-
-// Register Swiper modules
-SwiperCore.use([Autoplay, Pagination, Navigation]);
 
 // Import styles - use the original Home.css for now
 import '../styles/Home.css';
@@ -36,9 +32,11 @@ import 'aos/dist/aos.css';
 import farmingAnimation from '../assets/animations/farming-animation.json';
 import communityAnimation from '../assets/animations/community-animation.json';
 
+// Register Swiper modules
+SwiperCore.use([Autoplay, Pagination, Navigation]);
+
 const Home = () => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [heroData, setHeroData] = useState({
     title: 'Welcome to Annadata',
     subtitle: 'Your one-stop platform for agricultural resources and community'
@@ -62,20 +60,12 @@ const Home = () => {
     });
   }, []);
 
-  // Particles initialization
-  const particlesInit = useCallback(async (engine) => {
-    await loadSlim(engine);
-  }, []);
-
-  const particlesLoaded = useCallback(async (container) => {
-    // console.log(container);
-  }, []);
+  // Remove the particlesInit function since we're now using the ParticlesBackground component
 
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
         setLoading(true);
-        setError(null);
         
         const data = await getHomePageData();
         
@@ -91,7 +81,6 @@ const Home = () => {
         
       } catch (error) {
         console.error('Home data fetch error:', error);
-        setError(error);
         
         if (!window.location.hostname.includes('github')) {
           addFlash(error.message || 'Failed to load home data', 'danger');
@@ -146,63 +135,12 @@ const Home = () => {
       {/* Connection status indicator */}
       <ConnectionStatus />
       
-      {/* Hero Section with Particles Background */}
+      {/* Hero Section with Canvas Particles Background */}
       <section className="hero-section position-relative overflow-hidden">
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          loaded={particlesLoaded}
-          options={{
-            background: {
-              color: {
-                value: "transparent",
-              },
-            },
-            fpsLimit: 60,
-            particles: {
-              color: {
-                value: "#4CAF50",
-              },
-              links: {
-                color: "#4CAF50",
-                distance: 150,
-                enable: true,
-                opacity: 0.5,
-                width: 1,
-              },
-              move: {
-                direction: "none",
-                enable: true,
-                outModes: {
-                  default: "bounce",
-                },
-                random: false,
-                speed: 1,
-                straight: false,
-              },
-              number: {
-                density: {
-                  enable: true,
-                  area: 800,
-                },
-                value: 80,
-              },
-              opacity: {
-                value: 0.5,
-              },
-              shape: {
-                type: "circle",
-              },
-              size: {
-                value: { min: 1, max: 3 },
-              },
-            },
-            detectRetina: true,
-          }}
-          style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}
-        />
+        {/* ParticlesBackground component will add the canvas directly to this section */}
+        <ParticlesBackground />
 
-        <div className="container position-relative" style={{ zIndex: 1 }}>
+        <div className="container position-relative" style={{ zIndex: 10 }}>
           <div className="row align-items-center py-5">
             <div className="col-lg-6">
               <motion.div
@@ -254,7 +192,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="hero-wave">
+        <div className="hero-wave" style={{ zIndex: 3 }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
             <path fill="#ffffff" fillOpacity="1" d="M0,160L48,138.7C96,117,192,75,288,69.3C384,64,480,96,576,128C672,160,768,192,864,176C960,160,1056,96,1152,74.7C1248,53,1344,75,1392,85.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
           </svg>

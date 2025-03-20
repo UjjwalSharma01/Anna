@@ -130,8 +130,10 @@ export const mockForumData = {
   page: 1
 };
 
-export default {
+const mockData = {
   homeData: mockHomeData,
   schemes: mockSchemes,
   forum: mockForumData
 };
+
+export default mockData;

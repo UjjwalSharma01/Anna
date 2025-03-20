@@ -506,6 +506,8 @@ body {
   text-align: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 2.5rem !important;
+  position: relative;
+  min-height: 500px;
 }
 
 .featured-schemes .row,
@@ -687,4 +689,12 @@ main.container {
 .card-img-top {
   position: relative;
   z-index: 1;
+}
+
+/* Particles container styles */
+.particles-container {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0 !important;
 }

@@ -69,16 +69,15 @@ const Navbar = () => {
           <ul className="navbar-nav ms-auto">
             {isAuthenticated ? (
               <li className="nav-item dropdown">
-                <a
+                <button
                   className="nav-link dropdown-toggle"
-                  href="#"
                   id="navbarDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   {user?.username || 'User'}
-                </a>
+                </button>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li>
                     <Link 

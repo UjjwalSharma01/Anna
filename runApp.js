@@ -1,12 +1,25 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const dotenv = require('dotenv');
+
+try {
+  require('dotenv').config();
+} catch (error) {
+  console.warn('Warning: dotenv module not found, environment variables from .env will not be loaded');
+  console.warn('To fix this, run: npm install dotenv');
+  // Create a minimal polyfill for process.env
+  if (!process.env) {
+    process.env = {};
+  }
+}
 
 console.log('🌱 Starting Annadata application (Frontend + Backend)...');
 
-// Load environment variables
-dotenv.config();
+// Get the port from environment variables or use a default
+const PORT = process.env.PORT || 5050;
+
+// Dynamically determine whether to load frontend or backend based on environment
+const isBackendOnly = process.env.BACKEND_ONLY === 'true';
 
 // Note: MongoDB URI is now hardcoded in backend/server.js
 console.log('📝 Note: Using hardcoded MongoDB connection string in backend/server.js');
@@ -114,22 +127,29 @@ const startApplication = async () => {
   // Install dependencies first
   await installDependencies();
   
-  // Start backend first
-  const backendProcess = await startBackend();
-  
-  // Wait a bit for backend to initialize
-  setTimeout(() => {
-    // Then start frontend
-    const frontendProcess = startFrontend();
-    
-    // Handle process termination
-    process.on('SIGINT', () => {
-      console.log('\n🛑 Shutting down application...');
-      backendProcess.kill();
-      frontendProcess.kill();
-      process.exit();
-    });
-  }, 2000);
+  if (isBackendOnly) {
+    // Backend only mode
+    try {
+      // Use the startBackend function instead of requiring a non-existent module
+      const backend = await startBackend();
+      console.log(`Backend server is running on port ${PORT}`);
+    } catch (error) {
+      console.error('Failed to start backend:', error);
+    }
+  } else {
+    // Full stack mode - start both frontend and backend
+    try {
+      // Use the startBackend function
+      const backend = await startBackend();
+      console.log(`Backend API server is running on port ${PORT}`);
+
+      // Start frontend separately as advised in the console message
+      console.log(`Frontend should be started separately with 'cd annadata-frontend && npm start'`);
+      console.log(`Frontend will typically run on port 3000 by default`);
+    } catch (error) {
+      console.error('Failed to start application:', error);
+    }
+  }
 };
 
 // Start the application

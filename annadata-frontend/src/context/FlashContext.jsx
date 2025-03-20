@@ -14,6 +14,10 @@ export const useFlash = () => {
 export const FlashProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
 
+  const removeFlash = useCallback((id) => {
+    setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
+  }, []);
+
   const addFlash = useCallback((message, type = 'info', timeout = 5000) => {
     const id = uuidv4();
     setMessages(prevMessages => [...prevMessages, { id, message, type }]);
@@ -25,11 +29,7 @@ export const FlashProvider = ({ children }) => {
     }
 
     return id;
-  }, []);
-
-  const removeFlash = useCallback((id) => {
-    setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
-  }, []);
+  }, [removeFlash]); // Add removeFlash to the dependency array
 
   // Ensure we always return valid values in the context
   const contextValue = {
