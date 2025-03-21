@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { login, signup } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 import { useFlash } from '../context/FlashContext';
 
 const Auth = () => {
-  const [activeTab, setActiveTab] = useState('login');
+  console.log('[AUTH] Auth component rendering');
+  
+  useEffect(() => {
+    console.log('[AUTH] Auth component mounted');
+    return () => console.log('[AUTH] Auth component unmounted');
+  }, []);
+
+  // Default to login tab when coming from /login path
+  const location = useLocation();
+  console.log('[AUTH] Current location:', location);
+
+  const [activeTab, setActiveTab] = useState(
+    location.pathname === '/login' ? 'login' : 'login'
+  );
   const [loading, setLoading] = useState(false);
   
   // Login form state - updated to match EJS form fields
@@ -29,7 +42,6 @@ const Auth = () => {
   const { login: authLogin, signup: authSignup } = useAuth();
   const { addFlash } = useFlash();
   const navigate = useNavigate();
-  const location = useLocation();
   
   // Get redirect path from location state or default to home
   const from = location.state?.from || '/';
@@ -85,6 +97,7 @@ const Auth = () => {
 
   return (
     <div className="auth-page">
+      {console.log('[AUTH] Rendering Auth UI')}
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card shadow">

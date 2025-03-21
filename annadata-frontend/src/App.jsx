@@ -25,6 +25,7 @@ const QuestionDetail = lazy(() => import('./pages/QuestionDetail.jsx'));
 const Profile = lazy(() => import('./pages/Profile.jsx'));
 const Auth = lazy(() => import('./pages/Auth.jsx'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage.jsx'));
+const SchemeDetail = lazy(() => import('./pages/SchemeDetail.jsx'));
 
 // Create a BackendStatus component to show backend connectivity status
 const BackendStatus = ({ isHealthy, error }) => {
@@ -66,17 +67,22 @@ const router = createBrowserRouter(
       errorElement={<MainLayout><ErrorPage /></MainLayout>}
     >
       <Route index element={<Home />} />
-      <Route path="schemes" element={<Schemes />} />
-      <Route path="forum" element={<Forum />} />
-      <Route path="forum/:id" element={<QuestionDetail />} />
-      <Route 
-        path="forum/ask" 
-        element={
-          <ProtectedRoute>
-            <AskQuestion />
-          </ProtectedRoute>
-        } 
-      />
+      <Route path="schemes">
+        <Route index element={<Schemes />} />
+        <Route path=":id" element={<SchemeDetail />} /> 
+      </Route>
+      <Route path="forum">
+        <Route index element={<Forum />} />
+        <Route path=":id" element={<QuestionDetail />} />
+        <Route 
+          path="ask" 
+          element={
+            <ProtectedRoute>
+              <AskQuestion />
+            </ProtectedRoute>
+          } 
+        />
+      </Route>
       <Route 
         path="profile" 
         element={
@@ -85,6 +91,7 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         } 
       />
+      <Route path="auth" element={<Auth />} />
       <Route path="login" element={<Auth />} />
     </Route>
   ),

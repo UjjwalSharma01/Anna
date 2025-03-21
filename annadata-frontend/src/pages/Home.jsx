@@ -481,7 +481,7 @@ const Home = () => {
               <h2 className="display-5 fw-bold mb-3">Join Annadata Today</h2>
               <p className="lead mb-4">Connect with farmers, access agricultural schemes, and grow together.</p>
               <div className="d-flex justify-content-center gap-3">
-                <Link to="/login" className="btn btn-light btn-lg px-4">
+                <Link to="/auth" className="btn btn-light btn-lg px-4">
                   Sign Up Now
                 </Link>
                 <Link to="/schemes" className="btn btn-outline-light btn-lg px-4">

@@ -29,6 +29,8 @@ const Footer = () => {
               <li className="mb-2"><Link to="/" className="text-white text-decoration-none">Home</Link></li>
               <li className="mb-2"><Link to="/schemes" className="text-white text-decoration-none">Schemes</Link></li>
               <li className="mb-2"><Link to="/forum" className="text-white text-decoration-none">Forum</Link></li>
+              {/* Example of fixing login links if they exist */}
+              {/* <Link to="/auth" className="text-white text-decoration-none">Login/Register</Link> */}
             </ul>
           </div>
           

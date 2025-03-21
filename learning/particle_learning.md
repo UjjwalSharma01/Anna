@@ -25,3 +25,21 @@ The application initially used the tsParticles library to create an interactive 
 ### 1. Console Analysis
 The first step was analyzing the console logs to understand what was happening:
 
+
+This revealed that:
+- The component was correctly mounting.
+- The initialization was successfully completing.
+- The component was unmounting almost immediately.
+- Despite initialization success, no particles were visible.
+- There was a likely lifecycle issue causing premature unmounting.
+
+### 2. DOM Inspection
+Further investigation through browser developer tools showed:
+- The particles container was being added to the DOM.
+- The canvas element was being created correctly.
+- CSS styles might be affecting visibility or position.
+- Z-index conflicts could be hiding the particles.
+- The canvas might be getting removed or replaced.
+
+### 3. Error Tracing
+Specific cleanup errors provided more clues:

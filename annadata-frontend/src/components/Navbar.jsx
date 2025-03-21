@@ -103,7 +103,7 @@ const Navbar = () => {
               <li className="nav-item">
                 <Link 
                   className="btn btn-success"
-                  to="/login"
+                  to="/auth"
                   onClick={() => setIsOpen(false)}
                 >
                   Login/Register

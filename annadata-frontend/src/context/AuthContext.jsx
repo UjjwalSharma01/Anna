@@ -20,11 +20,14 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     try {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     } catch (error) {
       console.error('Error removing token from localStorage:', error);
     }
     setUser(null);
     setIsAuthenticated(false);
+    // If there's any automatic redirect, update it here:
+    // navigate('/auth');
   }, []);
 
   // Safe token storage helper
