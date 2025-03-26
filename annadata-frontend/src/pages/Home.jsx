@@ -3,47 +3,39 @@ import { Link } from 'react-router-dom';
 import { getHomePageData } from '../services/annadataService';
 import { useFlash } from '../context/FlashContext';
 import ConnectionStatus from '../components/ConnectionStatus.jsx';
-import { defaultSchemeImage } from '../utils/defaultImages';
+import CountUp from '../components/CountUp';
+import HeroSection from '../components/HeroSection';
+// Import the new CropDiseaseDetection component
+import CropDiseaseDetection from '../components/CropDiseaseDetection.jsx';
+
+// Import CSS
+import '../styles/Home.css';
+import '../styles/Home.part2.css';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [heroData, setHeroData] = useState({
-    title: 'Welcome to Annadata',
-    subtitle: 'Your one-stop platform for agricultural resources and community'
-  });
   const [featuredSchemes, setFeaturedSchemes] = useState([]);
   const [latestQuestions, setLatestQuestions] = useState([]);
+  const [cropDiseaseDetection, setCropDiseaseDetection] = useState(null);
   const { addFlash } = useFlash();
 
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
         setLoading(true);
-        setError(null);
         
         const data = await getHomePageData();
         
-        if (data.hero) {
-          setHeroData({
-            title: data.hero.title || 'Welcome to Annadata',
-            subtitle: data.hero.subtitle || 'Your one-stop platform for agricultural resources and community'
-          });
-        }
-        
         if (data.featuredSchemes) setFeaturedSchemes(data.featuredSchemes);
         if (data.latestQuestions) setLatestQuestions(data.latestQuestions);
+        if (data.cropDiseaseDetection) setCropDiseaseDetection(data.cropDiseaseDetection);
         
       } catch (error) {
         console.error('Home data fetch error:', error);
-        setError(error);
         
-        // Only show flash message if it's not a GitHub environment
-        // Since we expect network errors in GitHub environment
         if (!window.location.hostname.includes('github')) {
           addFlash(error.message || 'Failed to load home data', 'danger');
         }
-        
       } finally {
         setLoading(false);
       }
@@ -52,121 +44,330 @@ const Home = () => {
     fetchHomeData();
   }, [addFlash]);
 
+  useEffect(() => {
+    // Initialize Bootstrap carousel
+    if (featuredSchemes.length > 0) {
+      const carousel = document.getElementById('schemesCarousel');
+      if (carousel && typeof window.bootstrap !== 'undefined') {
+        new window.bootstrap.Carousel(carousel, {
+          interval: 5000,
+          touch: true
+        });
+      }
+    }
+  }, [featuredSchemes]);
+
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '50vh' }}>
-        <div className="spinner-border text-success" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div className="loading-container">
+        <div className="spinner-container">
+          <div className="spinner-border text-success spinner-lg" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
+        <p className="mt-3 text-center text-success">Loading Annadata...</p>
       </div>
     );
   }
 
   return (
-    <div className="home-page container px-4 px-lg-0">
-      {/* Connection status indicator */}
+    <div className="home-page">
       <ConnectionStatus />
       
-      {/* Hero Section */}
-      <section className="hero-section py-5 rounded mb-5 text-center">
-        <div className="row justify-content-center">
-          <div className="col-lg-10">
-            <h1 className="display-4 fw-bold text-success mb-3">{heroData.title}</h1>
-            <p className="lead mb-4">{heroData.subtitle}</p>
-            <div className="d-flex justify-content-center gap-3">
-              <Link to="/schemes" className="btn btn-success btn-lg px-4">
-                Explore Schemes
-              </Link>
-              <Link to="/forum" className="btn btn-outline-success btn-lg px-4">
-                Join Forum
-              </Link>
+      {/* Replace the existing hero section with our new component */}
+      <HeroSection />
+
+      <section className="stats-section py-5 bg-light">
+        <div className="container">
+          <div className="row g-4 text-center">
+            <div className="col-md-3 col-6">
+              <div className="stat-card p-4 bg-white rounded-4 shadow-sm h-100">
+                <div className="stat-icon mb-3 text-success">
+                  <i className="bi bi-flower3 fs-1"></i>
+                </div>
+                <h3 className="stat-number">
+                  <CountUp end={50} suffix="+" />
+                </h3>
+                <p className="stat-label text-muted">Agricultural Schemes</p>
+              </div>
+            </div>
+            <div className="col-md-3 col-6">
+              <div className="stat-card p-4 bg-white rounded-4 shadow-sm h-100">
+                <div className="stat-icon mb-3 text-success">
+                  <i className="bi bi-people fs-1"></i>
+                </div>
+                <h3 className="stat-number">
+                  <CountUp end={10000} suffix="+" />
+                </h3>
+                <p className="stat-label text-muted">Farmers Joined</p>
+              </div>
+            </div>
+            <div className="col-md-3 col-6">
+              <div className="stat-card p-4 bg-white rounded-4 shadow-sm h-100">
+                <div className="stat-icon mb-3 text-success">
+                  <i className="bi bi-chat-dots fs-1"></i>
+                </div>
+                <h3 className="stat-number">
+                  <CountUp end={500} suffix="+" />
+                </h3>
+                <p className="stat-label text-muted">Forum Questions</p>
+              </div>
+            </div>
+            <div className="col-md-3 col-6">
+              <div className="stat-card p-4 bg-white rounded-4 shadow-sm h-100">
+                <div className="stat-icon mb-3 text-success">
+                  <i className="bi bi-bar-chart fs-1"></i>
+                </div>
+                <h3 className="stat-number">
+                  <CountUp end={95} suffix="%" />
+                </h3>
+                <p className="stat-label text-muted">Satisfaction Rate</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Schemes */}
-      <section className="mb-5">
-        <h2 className="section-heading mb-4">Featured Agricultural Schemes</h2>
-        <div className="row g-4">
+      {/* Add the AI Crop Disease Detection section - using cropDiseaseDetection instead of homeData */}
+      {cropDiseaseDetection && (
+        <section className="disease-detection-section py-5">
+          <div className="container">
+            <CropDiseaseDetection data={cropDiseaseDetection} />
+          </div>
+        </section>
+      )}
+
+      <section className="featured-schemes-section py-5">
+        <div className="container">
+          <div className="section-header text-center mb-5">
+            <h6 className="text-uppercase text-success fw-bold">Explore</h6>
+            <h2 className="display-5 fw-bold">Featured Agricultural Schemes</h2>
+            <div className="divider mx-auto my-3"></div>
+            <p className="text-muted lead">Discover resources and support available to farmers</p>
+          </div>
+
           {featuredSchemes.length > 0 ? (
-            featuredSchemes.map((scheme) => (
-              <div key={scheme._id} className="col-md-4 mb-4">
-                <div className="card h-100 shadow-sm">
-                  <div className="card-img-container" style={{height: '160px', overflow: 'hidden'}}>
-                    <img 
-                      src={scheme.imageUrl || defaultSchemeImage}
-                      className="card-img-top h-100 w-100"
-                      alt={scheme.title}
-                      style={{objectFit: 'cover'}}
-                      onError={(e) => {
-                        console.log("Image error, using default");
-                        e.target.onerror = null; // Prevent infinite loop
-                        e.target.src = defaultSchemeImage;
-                      }}
-                    />
-                  </div>
-                  <div className="card-body d-flex flex-column">
-                    <h5 className="card-title text-success">{scheme.title}</h5>
-                    <p className="card-text flex-grow-1">{scheme.description?.substring(0, 100)}...</p>
-                    <Link to={`/schemes/${scheme._id}`} className="btn btn-sm btn-outline-success mt-auto align-self-start">
-                      Learn More
-                    </Link>
-                  </div>
+            <div className="schemes-carousel">
+              <div id="schemesCarousel" className="carousel slide" data-bs-ride="carousel">
+                <div className="carousel-inner">
+                  {Array.from({ length: Math.ceil(featuredSchemes.length / 2) }).map((_, index) => (
+                    <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
+                      <div className="schemes-pair-container">
+                        <div className="row schemes-row">
+                          {featuredSchemes.slice(index * 2, index * 2 + 2).map((scheme) => (
+                            <div className="col-md-6 scheme-column" key={scheme._id}>
+                              <div className="scheme-card h-100">
+                                <div className="scheme-image-container">
+                                  <img 
+                                    src={scheme.imageUrl || "https://via.placeholder.com/350x200/4CAF50/FFFFFF?text=Scheme"}
+                                    className="scheme-image"
+                                    alt={scheme.title}
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = "https://via.placeholder.com/350x200/4CAF50/FFFFFF?text=Scheme";
+                                    }}
+                                  />
+                                  {scheme.category && (
+                                    <div className="scheme-category">
+                                      {scheme.category}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="scheme-content">
+                                  <h5 className="scheme-title">{scheme.title}</h5>
+                                  <p className="scheme-description">{scheme.description?.substring(0, 80)}...</p>
+                                  <Link to={`/schemes/${scheme._id}`} className="btn btn-outline-success btn-sm d-flex align-items-center gap-2 justify-content-center mt-auto">
+                                    Learn More <i className="bi bi-arrow-right"></i>
+                                  </Link>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <button className="carousel-control-prev" type="button" data-bs-target="#schemesCarousel" data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon schemes-carousel-control" aria-hidden="true"></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#schemesCarousel" data-bs-slide="next">
+                  <span className="carousel-control-next-icon schemes-carousel-control" aria-hidden="true"></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+                
+                <div className="carousel-indicators schemes-indicators">
+                  {Array.from({ length: Math.ceil(featuredSchemes.length / 2) }).map((_, index) => (
+                    <button 
+                      key={index}
+                      type="button" 
+                      data-bs-target="#schemesCarousel" 
+                      data-bs-slide-to={index} 
+                      className={index === 0 ? 'active' : ''}
+                      aria-current={index === 0 ? 'true' : 'false'}
+                      aria-label={`Slide ${index + 1}`}
+                    ></button>
+                  ))}
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="col-12">
-              <div className="alert alert-info">No featured schemes available.</div>
             </div>
+          ) : (
+            <div className="alert alert-info">No featured schemes available.</div>
           )}
-        </div>
-        <div className="text-end mt-3">
-          <Link to="/schemes" className="text-success text-decoration-none">
-            View All Schemes <i className="bi bi-arrow-right"></i>
-          </Link>
+          
+          <div className="text-center mt-5">
+            <Link to="/schemes" className="btn btn-success px-4 py-2 d-inline-flex align-items-center gap-2">
+              View All Schemes <i className="bi bi-arrow-right"></i>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Latest Forum Questions */}
-      <section className="mb-5">
-        <h2 className="section-heading mb-4">Latest Forum Questions</h2>
-        <div className="list-group shadow-sm">
-          {latestQuestions.length > 0 ? (
-            latestQuestions.map((question) => (
-              <Link
-                key={question._id}
-                to={`/forum/${question._id}`}
-                className="list-group-item list-group-item-action border-start border-success border-3"
-              >
-                <div className="d-flex w-100 justify-content-between align-items-center mb-2">
-                  <h5 className="mb-0 fw-bold">{question.title}</h5>
-                  <small className="text-muted">
-                    {new Date(question.createdAt).toLocaleDateString()}
-                  </small>
+      <section className="features-section py-5 bg-light">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-6 mb-4 mb-lg-0">
+              <div>
+                <h6 className="text-uppercase text-success fw-bold">Why Choose Us</h6>
+                <h2 className="display-5 fw-bold mb-4">Empowering Farmers with Knowledge and Resources</h2>
+                
+                <div className="feature-item d-flex align-items-start mb-4">
+                  <div className="feature-icon me-3 mt-1">
+                    <div className="icon-circle">
+                      <i className="bi bi-lightning text-success"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h5>Quick Access to Schemes</h5>
+                    <p className="text-muted">Find and apply for government agricultural schemes all in one place.</p>
+                  </div>
                 </div>
-                <p className="mb-2">{question.content?.substring(0, 150)}...</p>
-                <div className="d-flex justify-content-between align-items-center">
-                  <small className="text-muted">
-                    By {question.author?.username || 'Anonymous'}
-                  </small>
-                  <span className="badge bg-secondary">
-                    {question.answers?.length || 0} answers
-                  </span>
+                
+                <div className="feature-item d-flex align-items-start mb-4">
+                  <div className="feature-icon me-3 mt-1">
+                    <div className="icon-circle">
+                      <i className="bi bi-people text-success"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h5>Farmer Community</h5>
+                    <p className="text-muted">Connect with other farmers, share experiences, and learn from each other.</p>
+                  </div>
                 </div>
-              </Link>
-            ))
-          ) : (
-            <div className="list-group-item">
-              <p className="text-muted mb-0">No questions available.</p>
+                
+                <div className="feature-item d-flex align-items-start">
+                  <div className="feature-icon me-3 mt-1">
+                    <div className="icon-circle">
+                      <i className="bi bi-file-text text-success"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h5>Expert Knowledge Base</h5>
+                    <p className="text-muted">Access agricultural best practices, tips, and techniques from experts.</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
+            
+            <div className="col-lg-6">
+              <div className="feature-animation">
+                <img 
+                  // src={require('../assets/images/farmer.jpg')} 
+                  alt="Community Illustration"
+                  className="img-fluid" 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    // Try a series of fallbacks for maximum reliability
+                    try {
+                      e.target.src = require('../assets/images/farming.jpg');
+                    } catch (err) {
+                      try {
+                        e.target.src = require('../assets/images/agriculture.jpg');
+                      } catch (err2) {
+                        // Final fallback to placeholder
+                        e.target.src = "https://via.placeholder.com/500x400/4CAF50/FFFFFF?text=Community";
+                      }
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="text-end mt-3">
-          <Link to="/forum" className="text-success text-decoration-none">
-            Visit Forum <i className="bi bi-arrow-right"></i>
-          </Link>
+      </section>
+
+      <section className="forum-questions-section py-5">
+        <div className="container">
+          <div className="section-header text-center mb-5">
+            <h6 className="text-uppercase text-success fw-bold">Community</h6>
+            <h2 className="display-5 fw-bold">Latest Forum Questions</h2>
+            <div className="divider mx-auto my-3"></div>
+            <p className="text-muted lead">Join the conversation with farmers across the country</p>
+          </div>
+
+          <div className="row">
+            {latestQuestions.length > 0 ? (
+              latestQuestions.slice(0, 4).map((question) => (
+                <div key={question._id} className="col-md-6 mb-4">
+                  <div className="question-card h-100">
+                    <Link to={`/forum/${question._id}`} className="question-link">
+                      <div className="question-content">
+                        <div className="d-flex justify-content-between align-items-start mb-3">
+                          <h5 className="question-title mb-0">{question.title}</h5>
+                          <span className="question-date">{new Date(question.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <p className="question-excerpt">{question.content?.substring(0, 120)}...</p>
+                        <div className="question-meta d-flex justify-content-between align-items-center">
+                          <span className="question-author">By {question.author?.username || 'Anonymous'}</span>
+                          <div className="d-flex align-items-center">
+                            <span className="question-upvotes me-3">
+                              <i className="bi bi-hand-thumbs-up me-1"></i>
+                              {question.upvotes || 0}
+                            </span>
+                            <span className="question-answers">
+                              <i className="bi bi-chat-dots me-1"></i>
+                              {question.answers?.length || 0}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-12">
+                <div className="alert alert-info">No questions available.</div>
+              </div>
+            )}
+          </div>
+
+          <div className="text-center mt-4">
+            <Link to="/forum" className="btn btn-success px-4 py-2 d-inline-flex align-items-center gap-2">
+              Visit Forum <i className="bi bi-arrow-right"></i>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="cta-section py-5">
+        <div className="container">
+          <div className="cta-wrapper bg-success text-white text-center p-5 rounded-4">
+            <div>
+              <h2 className="display-5 fw-bold mb-3">Join Annadata Today</h2>
+              <p className="lead mb-4">Connect with farmers, access agricultural schemes, and grow together.</p>
+              <div className="d-flex justify-content-center gap-3">
+                <Link to="/login" className="btn btn-light btn-lg px-4">
+                  Sign Up Now
+                </Link>
+                <Link to="/schemes" className="btn btn-outline-light btn-lg px-4">
+                  Explore Schemes
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

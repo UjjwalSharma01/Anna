@@ -11,6 +11,24 @@ export const mockHomeData = {
     subtitle: 'Your one-stop platform for agricultural resources and community',
     description: 'Access agricultural schemes, connect with farmers, and get the resources you need'
   },
+  // Add crop disease detection feature
+  cropDiseaseDetection: {
+    title: 'AI Crop Disease Detection',
+    description: 'Our advanced AI can identify plant diseases from photos to help you take timely action',
+    features: [
+      'Instant disease identification from plant images',
+      'Detailed disease information and treatment recommendations',
+      'Works with major crop varieties including rice, wheat, cotton, and vegetables',
+      'No internet connection needed for basic detection'
+    ],
+    commonDiseases: [
+      { name: 'Leaf Blight', crops: ['Rice', 'Wheat', 'Maize'] },
+      { name: 'Powdery Mildew', crops: ['Grapes', 'Wheat', 'Cucumbers'] },
+      { name: 'Leaf Rust', crops: ['Wheat', 'Coffee', 'Beans'] },
+      { name: 'Bacterial Spot', crops: ['Tomatoes', 'Peppers'] }
+    ],
+    actionButton: 'Scan Your Crop Now'
+  },
   featuredSchemes: [
     {
       _id: 'scheme1',

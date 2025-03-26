@@ -4,13 +4,18 @@ import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Access auth context safely with default values to prevent destructuring errors
+  const auth = useAuth() || { isAuthenticated: false, user: null }; 
+  const { isAuthenticated, user, logout } = auth;
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
+    if (logout) {
+      logout();
+      navigate('/login');
+    }
   };
 
   const isActive = (path) => {

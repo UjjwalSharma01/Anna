@@ -495,36 +495,170 @@ body {
 
 /* Home page specific styles */
 .home-page {
-  max-width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+.home-page .container {
+  position: relative;
+  z-index: 10 !important; /* Higher z-index to ensure content is above particles */
+  max-width: 1140px;
   margin: 0 auto;
 }
 
+/* Enhanced hero section with reliable animation */
 .home-page .hero-section {
-  background-color: #f0f8f0;
-  border-radius: 10px;
-  padding: 3rem 1rem;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative !important;
+  padding: 6rem 0;
   margin-bottom: 2.5rem !important;
+  overflow: hidden;
+  min-height: 550px !important;
+  z-index: 1;
 }
 
-.featured-schemes .row,
-.latest-questions .list-group {
-  margin-top: 1.5rem;
-}
-
-.home-page section {
-  margin-bottom: 3rem;
-}
-
-/* Section headings */
-h2.section-heading {
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+.home-page .hero-section .container {
   position: relative;
-  padding-left: 1rem;
-  border-left: 4px solid #4CAF50;
-  clear: both;
+  z-index: 5;
+}
+
+/* Remove all particles-related styles */
+#particles-canvas, 
+#tsparticles,
+.particles-container,
+.tsparticles-canvas-el {
+  display: none !important;
+}
+
+/* Hero content enhancements */
+.hero-content {
+  position: relative;
+  z-index: 5 !important;
+  padding: 2.5rem;
+}
+
+/* Fix for hero content alignment */
+.hero-content {
+  padding: 1rem;
+  position: relative;
+  z-index: 5 !important;
+}
+
+/* Particles Background - Fix visibility issues */
+#tsparticles,
+.particles-container,
+.tsparticles-canvas-el {
+  display: none !important;
+}
+
+/* Ensure our new canvas is visible */
+#particles-canvas {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 0.7 !important;
+}
+
+/* Section spacing corrections */
+.home-page section {
+  margin-bottom: 4rem;
+  padding: 2rem 0;
+  position: relative;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  padding: 4rem 0;
+  margin-bottom: 2rem;
+}
+
+/* Fix alignment for all section contents */
+.section-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+/* Fix for section container alignment */
+.home-page .row {
+  margin-left: -15px;
+  margin-right: -15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+}
+
+/* Fix for card alignment in rows */
+.home-page .col-md-4, 
+.home-page .col-md-6,
+.home-page .col-md-3,
+.home-page .col-lg-6 {
+  padding: 0 15px;
+  margin-bottom: 30px;
+}
+
+/* Fix for scheme cards */
+.scheme-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.scheme-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.scheme-description {
+  flex-grow: 1;
+}
+
+/* Make sure footer is at bottom without unnecessary margin */
+.footer {
+  margin-top: 0;
+}
+
+/* Fix for mobile display */
+@media (max-width: 768px) {
+  .home-page .hero-section {
+    padding: 3rem 0;
+  }
+  
+  .home-page section {
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.75rem !important;
+  }
+  
+  /* Fix for small screen card layout */
+  .home-page .col-md-4,
+  .home-page .col-md-6,
+  .home-page .col-md-3 {
+    margin-bottom: 20px;
+  }
+  
+  /* Center align hero content on mobile */
+  .hero-content {
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  /* Center hero buttons on mobile */
+  .hero-content .d-flex {
+    justify-content: center;
+  }
 }
 
 /* Mobile responsiveness improvements */
@@ -583,6 +717,8 @@ h2.section-heading {
 
 main.container {
   flex: 1;
+  z-index: 5 !important;
+  position: relative !important;
 }
 
 .app-logo {
@@ -687,4 +823,886 @@ main.container {
 .card-img-top {
   position: relative;
   z-index: 1;
+}
+
+/* Particles container styles */
+.particles-container {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0 !important;
+}
+
+/* Hero section styles - optimized for canvas particles */
+.home-page .hero-section {
+  background-color: #f0f8f0;
+  position: relative !important;
+  padding: 4rem 0;
+  margin-bottom: 2.5rem !important;
+  overflow: hidden;
+  min-height: 500px !important;
+  z-index: 1;
+}
+
+/* Canvas particles styles - increased specificity */
+.hero-section canvas,
+canvas#particles-canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Fix the stats section layout */
+.stats-section .row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-right: -15px !important;
+  margin-left: -15px !important;
+  justify-content: center !important;
+}
+
+.stats-section .col-md-3,
+.stats-section .col-6 {
+  position: relative !important;
+  width: auto !important;
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+  margin-bottom: 20px !important;
+  flex: 0 0 auto !important;
+}
+
+.stats-section .col-md-3 {
+  flex: 0 0 25% !important;
+  max-width: 25% !important;
+}
+
+.stats-section .col-6 {
+  flex: 0 0 50% !important;
+  max-width: 50% !important;
+}
+
+/* Ensure the cards have equal height */
+.stats-section .stat-card {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1.5rem !important;
+}
+
+/* Remove old particles library styles */
+#tsparticles,
+.particles-container,
+.tsparticles-canvas-el {
+  display: none !important; /* Hide the old particles implementation */
+}
+
+/* Fix the stats section layout to display in a single row */
+.stats-section .row {
+  display: flex !important;
+  flex-wrap: nowrap !important; /* Prevent wrapping to ensure single row */
+  margin-right: -15px !important;
+  margin-left: -15px !important;
+  justify-content: space-between !important; /* Distribute items evenly */
+  overflow-x: auto !important; /* Allow horizontal scrolling on small screens */
+}
+
+/* Make each stat card take equal width and prevent stacking */
+.stats-section .col-md-3,
+.stats-section .col-6 {
+  position: relative !important;
+  flex: 1 0 25% !important; /* Equal width (25%), don't shrink, can grow */
+  max-width: 25% !important;
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+/* Force all columns to appear side by side even on mobile */
+@media (max-width: 767.98px) {
+  .stats-section .col-6 {
+    flex: 1 0 25% !important;
+    max-width: 25% !important;
+  }
+  
+  .stats-section .stat-card {
+    padding: 0.75rem !important;
+  }
+  
+  .stats-section .stat-number {
+    font-size: 1.75rem !important;
+  }
+  
+  .stats-section .stat-label {
+    font-size: 0.75rem !important;
+  }
+  
+  .stats-section .stat-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* Counting animation styles */
+.count-up {
+  display: inline-block;
+  font-weight: 700;
+}
+
+/* Stats section enhancements for counting animation */
+.stats-section .stat-number {
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  color: #4CAF50 !important;
+  margin-bottom: 0.5rem !important;
+  transition: color 0.3s ease !important;
+}
+
+.stats-section .stat-card:hover .stat-number {
+  color: #388E3C !important; /* Darker green on hover */
+}
+
+/* Add subtle bounce animation to cards on load */
+@keyframes cardBounce {
+  0% { transform: translateY(20px); opacity: 0; }
+  60% { transform: translateY(-5px); }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.stats-section .stat-card {
+  animation: cardBounce 0.5s ease forwards;
+  opacity: 0;
+}
+
+.stats-section .col-md-3:nth-child(1) .stat-card { animation-delay: 0.1s; }
+.stats-section .col-md-3:nth-child(2) .stat-card { animation-delay: 0.2s; }
+.stats-section .col-md-3:nth-child(3) .stat-card { animation-delay: 0.3s; }
+.stats-section .col-md-3:nth-child(4) .stat-card { animation-delay: 0.4s; }
+
+/* Schemes Swiper Styles */
+.schemes-swiper {
+  padding: 20px 10px 50px !important;
+  margin: 0 -10px !important;
+}
+
+.swiper-slide {
+  height: auto !important;
+  display: flex !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #4CAF50 !important;
+  background-color: white !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 18px !important;
+  font-weight: bold !important;
+}
+
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  opacity: 0.3 !important;
+}
+
+.swiper-pagination-bullet {
+  background: #4CAF50 !important;
+  opacity: 0.5 !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  background: #4CAF50 !important;
+}
+
+.featured-schemes-section .scheme-card {
+  margin: 0 auto !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.featured-schemes-section .scheme-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
+  }
+  
+  .schemes-swiper {
+    padding-bottom: 40px !important;
+  }
+}
+
+/* Replace the Swiper styles with Bootstrap carousel styles */
+.schemes-carousel {
+  margin-bottom: 30px !important;
+}
+
+.carousel-item {
+  padding: 10px 0 40px !important;
+}
+
+.schemes-carousel-control {
+  width: 40px !important;
+  height: 40px !important;
+  background-color: #4CAF50 !important;
+  border-radius: 50% !important;
+  filter: none !important;
+  opacity: 0.8 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+  background-size: 50% !important;
+}
+
+.carousel-control-prev, .carousel-control-next {
+  width: 5% !important;
+  opacity: 1 !important;
+}
+
+.schemes-indicators {
+  bottom: 0 !important;
+}
+
+.schemes-indicators button {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: #4CAF50 !important;
+  opacity: 0.5 !important;
+  margin: 0 5px !important;
+}
+
+.schemes-indicators button.active {
+  background-color: #4CAF50 !important;
+  opacity: 1 !important;
+}
+
+.featured-schemes-section .scheme-card {
+  margin: 10px auto !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.featured-schemes-section .scheme-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Mobile adjustments for carousel */
+@media (max-width: 767px) {
+  .schemes-carousel .col-md-6:not(:last-child) {
+    margin-bottom: 20px !important;
+  }
+}
+
+/* Scheme cards improved layout */
+.schemes-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.scheme-card {
+  height: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1) !important;
+  width: 100% !important;
+  max-width: 350px !important; /* Control the maximum width */
+}
+
+.scheme-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.scheme-image-container {
+  position: relative;
+  overflow: hidden;
+  height: 180px;
+}
+
+.scheme-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.scheme-card:hover .scheme-image {
+  transform: scale(1.05);
+}
+
+.scheme-category {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(76, 175, 80, 0.9);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.scheme-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.scheme-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #333;
+}
+
+.scheme-description {
+  color: #666;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Enhanced carousel styles for side-by-side schemes */
+.schemes-carousel {
+  margin-bottom: 40px !important;
+  max-width: 900px !important; /* Control maximum width */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.schemes-pair-container {
+  padding: 10px !important;
+  margin-bottom: 20px !important;
+}
+
+.carousel-item {
+  padding-bottom: 50px !important; /* Space for indicators */
+}
+
+.scheme-card {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+  max-width: 320px !important; /* Limit width of each card */
+  margin: 0 auto !important;
+}
+
+.scheme-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.scheme-image-container {
+  position: relative !important;
+  overflow: hidden !important;
+  height: 160px !important;
+}
+
+.scheme-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.5s ease !important;
+}
+
+.scheme-card:hover .scheme-image {
+  transform: scale(1.05) !important;
+}
+
+.scheme-category {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background-color: rgba(76, 175, 80, 0.9) !important;
+  color: white !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 20px !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+}
+
+.scheme-content {
+  padding: 1.25rem !important;
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: white !important;
+}
+
+.scheme-title {
+  font-weight: 600 !important;
+  margin-bottom: 0.75rem !important;
+  color: #333 !important;
+}
+
+.scheme-description {
+  color: #666 !important;
+  margin-bottom: 1rem !important;
+  flex-grow: 1 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Carousel controls styling */
+.schemes-carousel-control {
+  width: 35px !important;
+  height: 35px !important;
+  background-color: #4CAF50 !important;
+  border-radius: 50% !important;
+  filter: none !important;
+  opacity: 0.8 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+  background-size: 50% !important;
+}
+
+.carousel-control-prev, .carousel-control-next {
+  width: 10% !important;
+  opacity: 1 !important;
+}
+
+.schemes-indicators {
+  bottom: 0 !important;
+}
+
+.schemes-indicators button {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: #4CAF50 !important;
+  opacity: 0.5 !important;
+  margin: 0 5px !important;
+}
+
+.schemes-indicators button.active {
+  background-color: #4CAF50 !important;
+  opacity: 1 !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .schemes-carousel .col-md-6:not(:last-child) {
+    margin-bottom: 20px !important;
+  }
+  
+  .schemes-carousel .scheme-card {
+    max-width: 100% !important;
+  }
+}
+
+/* Fix horizontal pairing of scheme cards */
+.schemes-carousel {
+  margin-bottom: 40px !important;
+  max-width: 900px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.schemes-row {
+  display: flex !important;
+  flex-direction: row !important; /* Force horizontal layout */
+  flex-wrap: nowrap !important;
+  margin: 0 -10px !important;
+}
+
+.scheme-column {
+  padding: 0 15px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  float: left !important; /* Old-school but helps with horizontal layout */
+  width: 50% !important; /* Force 50% width */
+}
+
+.schemes-pair-container {
+  padding: 10px 20px !important;
+  overflow: hidden !important;
+  margin-bottom: 20px !important;
+}
+
+.scheme-card {
+  margin: 0 auto !important;
+  width: 100% !important;
+  max-width: 350px !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+  background-color: white !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.carousel-item {
+  padding-bottom: 40px !important; /* Space for indicators */
+}
+
+/* Enhanced carousel controls */
+.schemes-carousel-control {
+  background-color: #4CAF50 !important;
+  width: 35px !important;
+  height: 35px !important;
+  border-radius: 50% !important;
+  opacity: 0.8 !important;
+  filter: invert(1) brightness(100) !important; /* Make arrow white */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+  background-size: 50% !important;
+}
+
+.carousel-control-prev, 
+.carousel-control-next {
+  opacity: 1 !important;
+  width: 8% !important;
+  z-index: 20 !important; /* Ensure visibility */
+}
+
+.carousel-control-prev {
+  left: -15px !important;
+}
+
+.carousel-control-next {
+  right: -15px !important;
+}
+
+/* Improve carousel navigation buttons visibility */
+.schemes-carousel {
+  position: relative !important;
+  padding: 0 30px !important; /* Add padding to make room for buttons */
+}
+
+/* Make carousel controls more visible */
+.carousel-control-prev, 
+.carousel-control-next {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  opacity: 1 !important;
+  z-index: 100 !important; /* Ensure high z-index */
+  position: absolute !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
+}
+
+.carousel-control-prev {
+  left: 0 !important;
+}
+
+.carousel-control-next {
+  right: 0 !important;
+}
+
+.schemes-carousel-control {
+  background-color: #4CAF50 !important;
+  background-size: 50% !important;
+  display: inline-block !important;
+  width: 20px !important;
+  height: 20px !important;
+  opacity: 1 !important;
+}
+
+/* Make sure carousel itself doesn't hide buttons */
+.carousel-inner {
+  overflow: visible !important;
+  padding: 0 15px !important;
+}
+
+/* Fix for carousel items layout so they don't hide buttons */
+.schemes-pair-container {
+  margin: 0 !important;
+  padding: 10px 5px 30px !important; /* Add bottom padding for indicators */
+  overflow: visible !important;
+}
+
+/* Fix carousel controls to make them clearly visible */
+.carousel-control-prev, 
+.carousel-control-next {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  width: 45px !important;
+  height: 45px !important;
+  border-radius: 50% !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  opacity: 1 !important;
+  z-index: 100 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  border: 2px solid #4CAF50 !important;
+  margin: 0 10px !important;
+}
+
+/* Fix the position of the carousel controls */
+.carousel-control-prev {
+  left: -10px !important;
+}
+
+.carousel-control-next {
+  right: -10px !important;
+}
+
+/* Make the control icons clearly visible with proper coloring */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #4CAF50 !important;
+  background-size: 50% !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-block !important;
+  filter: brightness(0) invert(1) !important; /* Ensure icons are white */
+}
+
+/* Adjust control icon position */
+.carousel-control-prev .carousel-control-prev-icon {
+  margin-right: 3px !important;
+}
+
+.carousel-control-next .carousel-control-next-icon {
+  margin-left: 3px !important;
+}
+
+/* Add hover effects to make buttons more interactive */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background-color: #4CAF50 !important;
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  background-color: white !important;
+  filter: none !important;
+}
+
+/* Ensure carousel container has proper padding for arrows */
+.schemes-carousel {
+  padding: 0 40px !important;
+  position: relative !important;
+  margin-bottom: 40px !important;
+}
+
+/* Fix carousel controls position and appearance */
+.carousel-control-prev, 
+.carousel-control-next {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  opacity: 1 !important;
+  z-index: 100 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  border: 2px solid #4CAF50 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Position the controls further away from the content */
+.carousel-control-prev {
+  left: -25px !important;
+}
+
+.carousel-control-next {
+  right: -25px !important;
+}
+
+/* Make the control icons black and clearly visible */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none !important; /* Remove default Bootstrap icons */
+  width: 30px !important;
+  height: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+/* Add clear < and > arrow symbols */
+.carousel-control-prev-icon:after {
+  content: "←" !important; /* Unicode left arrow is more visible */
+  font-size: 30px !important;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  line-height: 1 !important;
+}
+
+.carousel-control-next-icon:after {
+  content: "→" !important; /* Unicode right arrow is more visible */
+  font-size: 30px !important;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  line-height: 1 !important;
+}
+
+/* Hover effects */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background-color: #4CAF50 !important;
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon:after,
+.carousel-control-next:hover .carousel-control-next-icon:after {
+  color: #ffffff !important;
+}
+
+/* Adjust carousel container padding for the arrow positions */
+.schemes-carousel {
+  padding: 0 50px !important;
+  position: relative !important;
+}
+
+/* Fix for carousel arrow visibility - explicitly make them visible */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 50px !important;
+  height: 50px !important;
+  background-color: white !important;
+  border-radius: 50% !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) !important;
+  border: 2px solid #4CAF50 !important;
+  opacity: 1 !important;
+  top: 40% !important;
+  position: absolute !important;
+  z-index: 1000 !important; /* Extremely high z-index */
+}
+
+.carousel-control-prev {
+  left: -25px !important;
+}
+
+.carousel-control-next {
+  right: -25px !important;
+}
+
+/* Remove default Bootstrap arrow styling completely */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  position: relative !important;
+}
+
+/* Add custom black arrow text */
+.carousel-control-prev-icon:after {
+  content: "◀" !important; /* Black triangle arrow */
+  font-size: 24px !important;
+  color: black !important; /* Force black color */
+  position: absolute !important;
+  top: -12px !important;
+  left: -7px !important;
+}
+
+.carousel-control-next-icon:after {
+  content: "▶" !important; /* Black triangle arrow */
+  font-size: 24px !important;
+  color: black !important; /* Force black color */
+  position: absolute !important;
+  top: -12px !important;
+  left: -7px !important;
+}
+
+/* Hover effects that maintain visibility */
+.carousel-control-prev:hover .carousel-control-prev-icon:after,
+.carousel-control-next:hover .carousel-control-next-icon:after {
+  color: black !important; /* Keep arrows black on hover */
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background-color: rgba(255, 255, 255, 0.9) !important; /* Slightly transparent on hover */
+  border-color: black !important; /* Darker border on hover */
+}
+
+/* Additional fixes to ensure carousel controls are visible */
+.carousel-inner {
+  overflow: visible !important; /* Ensure controls outside the carousel area are visible */
+}
+
+.schemes-carousel {
+  padding: 0 50px !important; /* Add space for controls */
+  margin-bottom: 40px !important;
+}
+
+/* Fix arrow positioning in carousel controls to center them properly */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 50px !important;
+  height: 50px !important;
+  background-color: white !important;
+  border-radius: 50% !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) !important;
+  border: 2px solid #4CAF50 !important;
+  opacity: 1 !important;
+  top: 40% !important;
+  position: absolute !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important; /* Ensure proper centering */
+}
+
+/* Center the arrow icons properly */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: static !important; /* Remove absolute positioning */
+  margin: 0 !important; /* Remove any margins that might affect centering */
+}
+
+/* Fix the arrow symbol positioning */
+.carousel-control-prev-icon:after,
+.carousel-control-next-icon:after {
+  content: "◀" !important; /* Black triangle arrow for prev */
+  font-size: 22px !important;
+  color: black !important;
+  line-height: 1 !important;
+  position: static !important; /* Remove absolute positioning */
+}
+
+.carousel-control-next-icon:after {
+  content: "▶" !important; /* Black triangle arrow for next */
 }

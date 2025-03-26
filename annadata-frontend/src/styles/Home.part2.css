@@ -1,0 +1,370 @@
+/* Additional styles for the enhanced Home page - Part 2 */
+
+/* Remove all particle background related styles */
+#particles-canvas, #tsparticles {
+  display: none !important;
+}
+
+/* Rounded-4 utility class for higher border-radius */
+.rounded-4 {
+  border-radius: 1rem !important;
+}
+
+/* Gap utility classes */
+.gap-2 {
+  gap: 0.5rem !important;
+}
+
+.gap-3 {
+  gap: 1rem !important;
+}
+
+/* Additional utility classes for icons */
+.fs-4 {
+  font-size: 1.5rem !important;
+}
+
+/* Swiper customizations */
+.swiper-pagination {
+  margin-top: 2rem;
+}
+
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background-color: #4CAF50;
+  opacity: 0.3;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: #4CAF50;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  color: #4CAF50 !important;
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+  font-size: 1.25rem !important;
+}
+
+/* Enhanced hero section background alternatives */
+.gradient-bg {
+  background: linear-gradient(120deg, #e0f7e0, #f0f8f0, #e8f5e9);
+  background-size: 200% 200%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.pattern-bg {
+  background-color: #f0f8f0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234caf50' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Animated shapes background */
+.shapes-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.shapes-bg::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  top: -100px;
+  right: -100px;
+  animation: morphShape 15s linear infinite alternate;
+  z-index: 0;
+}
+
+.shapes-bg::after {
+  content: '';
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 70% 30% 30% 70% / 60% 40% 60% 40%;
+  bottom: -100px;
+  left: -50px;
+  animation: morphShape 20s linear infinite alternate-reverse;
+  z-index: 0;
+}
+
+@keyframes morphShape {
+  0% {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  }
+  25% {
+    border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
+  }
+  50% {
+    border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
+  }
+  75% {
+    border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+  }
+  100% {
+    border-radius: 70% 30% 30% 70% / 60% 40% 60% 40%;
+  }
+}
+
+/* Enhanced Hero Section with Animated Morphing Shapes - Ultra Appealing */
+.hero-animated-bg {
+  position: relative;
+  background-color: #f8fff8;
+  overflow: hidden;
+}
+
+/* First animated shape */
+.hero-animated-bg::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: linear-gradient(120deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  top: -300px;
+  right: -200px;
+  animation: morphShape 25s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+/* Second animated shape */
+.hero-animated-bg::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(120deg, rgba(76, 175, 80, 0.15), rgba(165, 214, 167, 0.15));
+  border-radius: 70% 30% 30% 70% / 60% 40% 60% 40%;
+  bottom: -250px;
+  left: -100px;
+  animation: morphShape 20s ease-in-out infinite alternate-reverse;
+  z-index: 0;
+}
+
+/* Additional decorative elements for visual interest */
+.hero-animated-bg .shape-1 {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(129, 199, 132, 0.15), rgba(129, 199, 132, 0.1));
+  border-radius: 50%;
+  top: 20%;
+  left: 15%;
+  animation: floatAnimation 8s ease-in-out infinite, fadeInOut 8s ease-in-out infinite;
+  z-index: 0;
+}
+
+.hero-animated-bg .shape-2 {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(129, 199, 132, 0.1), rgba(129, 199, 132, 0.05));
+  border-radius: 50%;
+  bottom: 15%;
+  right: 10%;
+  animation: floatAnimation 12s ease-in-out infinite reverse, fadeInOut 12s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Subtle dot pattern overlay for texture */
+.hero-animated-bg .dot-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(76, 175, 80, 0.2) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* Hero image styling */
+.hero-image-container {
+  position: relative;
+  z-index: 4;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  transform: perspective(1000px) rotateY(-5deg);
+  transition: transform 0.5s ease;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.hero-image-container:hover {
+  transform: perspective(1000px) rotateY(0deg);
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.5s ease;
+}
+
+.hero-image-container:hover .hero-image {
+  transform: scale(1.03);
+}
+
+/* Keyframes for floating animation */
+@keyframes floatAnimation {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-15px) translateX(10px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* Keyframes for subtle opacity changes */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/* Enhance hero content for better contrast with background */
+.hero-content {
+  position: relative;
+  z-index: 5;
+  padding: 3rem 2rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-out;
+  margin-bottom: 1rem;
+}
+
+/* Button styles for hero section */
+.hero-btn {
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-success.hero-btn {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  border: none;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn-success.hero-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(76, 175, 80, 0.4);
+}
+
+.btn-outline-success.hero-btn {
+  border: 2px solid #4CAF50;
+  color: #4CAF50;
+  background: transparent;
+}
+
+.btn-outline-success.hero-btn:hover {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* Additional Responsive Utilities */
+@media (max-width: 576px) {
+  .display-3 {
+    font-size: 2rem !important;
+  }
+  
+  .display-5 {
+    font-size: 1.5rem !important;
+  }
+  
+  .lead {
+    font-size: 1rem !important;
+  }
+  
+  .btn-lg {
+    padding: 0.5rem 1rem !important;
+    font-size: 1rem !important;
+  }
+  
+  .swiper-slide-custom {
+    width: 220px;
+  }
+
+  .shapes-bg::before,
+  .shapes-bg::after {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .hero-animated-bg::before {
+    width: 400px;
+    height: 400px;
+    top: -200px;
+    right: -150px;
+  }
+  
+  .hero-animated-bg::after {
+    width: 300px;
+    height: 300px;
+    bottom: -150px;
+    left: -80px;
+  }
+  
+  .hero-animated-bg .shape-1,
+  .hero-animated-bg .shape-2 {
+    display: none; /* Hide extra shapes on mobile for better performance */
+  }
+  
+  .hero-content {
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .hero-image-container {
+    transform: none;
+    margin-top: 1rem;
+  }
+  
+  .hero-image {
+    max-height: 250px;
+  }
+  
+  .hero-buttons-container {
+    justify-content: center !important;
+  }
+}
