@@ -1,0 +1,89 @@
+/* Popup container - EXACT copy from EJS */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  color: white;
+  padding: 50px;
+  font-size: xxx-large;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 10000 !important;
+  min-width: 300px;
+  text-align: center;
+}
+
+/* Close button - EXACT copy from EJS */
+.cross {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Overlay behind popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+/* Google Translate element specific styles */
+#google_translate_element {
+  margin-top: 20px !important;
+  min-height: 40px !important;
+}
+
+/* Make sure Google translate dropdown is visible */
+.goog-te-gadget {
+  color: white !important;
+  font-family: 'Roboto', sans-serif !important;
+  margin: 0 !important;
+}
+
+/* Hide Google branding */
+.goog-te-gadget img,
+.goog-te-gadget a,
+.goog-te-gadget span:not(.goog-te-combo) {
+  display: none !important;
+}
+
+/* Style dropdown */
+.goog-te-gadget select,
+.goog-te-combo {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  max-width: 250px !important;
+  background-color: white !important; 
+  color: black !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+  border: none !important;
+  font-size: 16px !important;
+  margin: 15px auto !important;
+  height: auto !important;
+}
+
+/* Hide Google translate banner */
+.goog-te-banner-frame,
+.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body {
+  top: 0 !important;
+  position: static !important;
+}

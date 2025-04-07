@@ -12,6 +12,7 @@ import { ImageProvider } from './context/ImageContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import LoadingSpinner from './components/LoadingSpinner.jsx';
 import { checkBackendHealth } from './utils/backendChecker.js';
+import { fixTranslateIssues, ensureTranslateDropdownWorks } from './utils/translationHelper';
 
 // Import the CSS file
 import './App.css';
@@ -128,8 +129,57 @@ function App() {
     // Set up periodic checks (every 30 seconds)
     const intervalId = setInterval(checkBackendStatus, 30000);
 
-    // Clean up interval on unmount
-    return () => clearInterval(intervalId);
+    // Initialize translation observer to fix Google Translate issues
+    fixTranslateIssues();
+
+    // Fix Google Translate body shifting issue and ensure dropdown works
+    const fixGoogleTranslate = () => {
+      document.body.style.top = '0px';
+      document.body.style.position = 'static';
+      
+      // Remove Google Translate iframe banners
+      const elements = document.querySelectorAll('.skiptranslate, .goog-te-banner-frame');
+      elements.forEach(el => {
+        if (el) {
+          el.style.display = 'none';
+        }
+      });
+      
+      // Make sure dropdown works
+      ensureTranslateDropdownWorks();
+    };
+
+    // Apply fix initially and set interval to reapply
+    fixGoogleTranslate();
+    const translateFixInterval = setInterval(fixGoogleTranslate, 1000);
+    
+    // Listen for changes from Google Translate
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList' || 
+            (mutation.type === 'attributes' && 
+            (mutation.target.classList.contains('translated-ltr') || 
+             mutation.target.classList.contains('translated-rtl')))) {
+          fixTranslateIssues();
+          ensureTranslateDropdownWorks();
+        }
+      });
+    });
+    
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+    
+    return () => {
+      // Clean up interval on unmount
+      clearInterval(intervalId);
+      
+      clearInterval(translateFixInterval);
+      mutationObserver.disconnect();
+    };
   }, []);
 
   return (

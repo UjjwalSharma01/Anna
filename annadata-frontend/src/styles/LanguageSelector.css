@@ -1,0 +1,515 @@
+.language-selector {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin-left: auto;
+  position: relative;
+  z-index: 1001;
+}
+
+.language-label {
+  color: #4CAF50;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+#google_translate_element {
+  display: inline-block;
+  font-size: 0.9rem;
+  margin-top: 15px;
+}
+
+/* Improved Google Translate widget styling */
+.goog-te-gadget {
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 1rem !important;
+  color: #333 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.goog-te-gadget-simple {
+  border: 1px solid #ddd !important;
+  padding: 8px 12px !important;
+  border-radius: 5px !important;
+  background-color: #f8f8f8 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.goog-te-menu-value {
+  color: #333 !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+}
+
+.goog-te-menu-value span:first-child {
+  font-weight: 500;
+}
+
+/* Remove Google branding */
+.goog-te-gadget-icon,
+.goog-te-gadget span:last-child,
+.goog-te-gadget-simple .goog-te-menu-value span:last-child,
+.goog-te-gadget span:not(.goog-te-menu-value span) {
+  display: none !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+  margin: 10px 0 !important;
+  padding: 10px !important;
+  border-radius: 5px !important;
+  border: 1px solid #ddd !important;
+  width: 100% !important;
+  max-width: 250px !important;
+  font-size: 1rem !important;
+  color: #333 !important;
+  background-color: #f8f8f8 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+}
+
+.goog-te-gadget .goog-te-combo:focus {
+  border-color: #4CAF50 !important;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25) !important;
+}
+
+/* Fix for the dropdown menu */
+.goog-te-menu-frame {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  max-width: 200px !important;
+}
+
+.language-selector-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .language-selector-container {
+    position: absolute;
+    top: 80px;
+    right: 15px;
+  }
+  
+  .language-selector {
+    padding: 5px 8px;
+  }
+  
+  .language-label {
+    font-size: 0.7rem;
+  }
+  
+  /* Fix for selector overflow */
+  .skiptranslate.goog-te-gadget,
+  .goog-te-gadget-simple {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .language-popup {
+    width: 90%;
+    max-width: 350px;
+    padding: 20px;
+  }
+  
+  .goog-te-gadget .goog-te-combo {
+    font-size: 0.9rem !important;
+    padding: 8px !important;
+  }
+}
+
+/* Fix for the body shift issue */
+body {
+  top: 0 !important;
+}
+
+/* Hide the Google translate top bar */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+.goog-te-menu-value:hover {
+  text-decoration: none !important;
+}
+
+/* Fix position for popup */
+#goog-gt-tt, .goog-te-balloon-frame {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Language button styling */
+.language-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.language-button:hover {
+  background-color: #388E3C;
+}
+
+.language-button i {
+  margin-right: 6px;
+  font-size: 1.1rem;
+}
+
+/* Language popup styling */
+.language-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  min-width: 320px;
+  text-align: center;
+}
+
+.language-popup h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #777;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.popup-close:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Google Translate widget styling */
+.translate-element {
+  margin: 20px auto;
+  max-width: 100%;
+}
+
+.translate-help-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 15px;
+}
+
+/* Fix Google Translate body offset issues */
+.skiptranslate,
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+/* Popup styling - match EJS implementation */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  min-width: 300px;
+  background-color: black;
+  color: white;
+  padding: 50px;
+  font-size: 24px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center;
+}
+
+.dark-popup {
+  background-color: black;
+  color: white;
+}
+
+.popup-title {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.cross {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Google Translate element styling */
+#google_translate_element {
+  margin-top: 15px;
+}
+
+#google_translate_element select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .popup {
+    width: 90%;
+    max-width: 350px;
+    padding: 20px;
+    font-size: 1.25rem;
+  }
+}
+
+/* Clean Google Translate widget styles */
+.goog-te-gadget {
+  font-family: 'Roboto', sans-serif !important;
+  color: white !important;
+  font-size: 1rem !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+  background-color: white !important;
+  color: black !important;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 8px 12px !important;
+  margin: 10px 0 !important;
+  width: 100% !important;
+  max-width: 250px !important;
+  font-size: 1rem !important;
+  height: auto !important;
+}
+
+.goog-te-banner-frame, 
+.skiptranslate {
+  display: none !important;
+}
+
+/* Popup container */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  color: white;
+  padding: 50px;
+  font-size: 24px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  min-width: 300px;
+  text-align: center;
+}
+
+/* Close button */
+.cross {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Overlay behind popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Language button style */
+.language-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide Google translate attribution */
+.goog-te-gadget {
+  color: white !important;
+}
+
+.goog-te-gadget img,
+.goog-te-gadget a {
+  display: none !important;
+}
+
+.goog-te-gadget span {
+  display: none !important;
+}
+
+/* Fix Google translate banner */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+.skiptranslate {
+  display: none !important;
+}
+
+/* Make sure Google translate dropdown is visible */
+.goog-te-gadget select {
+  background-color: white !important;
+  color: black !important;
+  padding: 8px !important;
+  margin-top: 20px !important;
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 5px !important;
+  border: none !important;
+  font-size: 16px !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Essential styling for Google Translate elements */
+.goog-te-gadget {
+  color: white !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+/* Hide Google branding */
+.goog-te-gadget img,
+.goog-te-gadget a,
+.goog-te-gadget span:not(.goog-te-combo) {
+  display: none !important;
+}
+
+/* Make the dropdown visible and styled properly */
+.goog-te-gadget select,
+.goog-te-combo {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  max-width: 300px !important;
+  background-color: white !important; 
+  color: black !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+  border: 2px solid #4CAF50 !important;
+  font-size: 16px !important;
+  margin: 10px auto !important;
+  height: auto !important;
+}
+
+/* Fix Google translate banner and other elements */
+.goog-te-banner-frame,
+.skiptranslate,
+body > .skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* A critical fix to ensure select elements are visible */
+select {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}

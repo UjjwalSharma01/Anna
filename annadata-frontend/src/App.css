@@ -10,6 +10,8 @@ body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
+  top: 0 !important;
+  position: static !important;
 }
 
 /* Layout container */
@@ -1705,4 +1707,187 @@ canvas#particles-canvas {
 
 .carousel-control-next-icon:after {
   content: "▶" !important; /* Black triangle arrow for next */
+}
+
+/* Fix for Google Translate Banner */
+.skiptranslate iframe.skiptranslate {
+  display: none !important;
+}
+
+/* Extra Google Translate Fixes */
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+  display: none !important;
+}
+
+.VIpgJd-ZVi9od-l4eHX-hSRGPd {
+  display: none !important;
+}
+
+/* Hide the top banner added by Google Translate */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+/* For mobile devices */
+@media (max-width: 767px) {
+  .language-selector-container {
+    position: static;
+    margin-bottom: 1rem;
+  }
+  
+  .language-selector {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Enhanced Google Translate fixes */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* Remove Google Translate top banner */
+.skiptranslate {
+  display: none !important;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+/* Hide all translate banners by default */
+iframe.skiptranslate {
+  display: none !important;
+}
+
+/* Fix for popups */
+#goog-gt-tt, 
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+/* Remove highlights added by Google Translate */
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Prevent page shifting from translate */
+.translated-ltr {
+  margin-top: 0 !important;
+}
+
+/* Google Translate Fixes */
+/* Hide Google Translate top banner */
+.goog-te-banner-frame,
+.skiptranslate {
+  display: none !important;
+}
+
+/* Fix the body shift issue */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* Fix for popup styling */
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+  display: none !important;
+}
+
+.goog-tooltip {
+  display: none !important;
+}
+
+.goog-tooltip:hover {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Enhanced Google Translate Fixes */
+/* This is a critical section to ensure the dropdown displays */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+.goog-te-banner-frame, 
+.skiptranslate {
+  display: none !important;
+}
+
+/* Make sure dropdown is visible */
+.goog-te-menu-frame {
+  box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 5px !important;
+  max-width: 100% !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
+}
+
+.goog-te-menu-value {
+  display: block !important;
+  width: 100% !important;
+  text-align: left !important;
+}
+
+.goog-te-menu2 {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  padding: 10px !important;
+  border-radius: 5px !important;
+  border: none !important;
+}
+
+.goog-te-menu2-item div, .goog-te-menu2-item:link {
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 1rem !important;
+  padding: 8px 12px !important;
+}
+
+/* Critical Google Translate Fixes */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* Hide the Google Translate banner */
+.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Make sure the Google Translate dropdown shows */
+.goog-te-gadget select.goog-te-combo {
+  width: 100% !important;
+  padding: 8px !important; 
+  border: 1px solid #ddd !important;
+  border-radius: 5px !important;
+  color: #333 !important;
+  font-size: 1rem !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Remove extra branding */
+.goog-logo-link, 
+.goog-te-gadget span {
+  display: none !important;
+}
+
+/* Fix translation highlighting */
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
 }
