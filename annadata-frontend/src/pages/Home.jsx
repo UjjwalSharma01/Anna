@@ -19,9 +19,6 @@ const Home = () => {
   const [cropDiseaseDetection, setCropDiseaseDetection] = useState(null);
   const { addFlash } = useFlash();
 
-  // Add a state to track Google Translate initialization
-  const [translateInitialized, setTranslateInitialized] = useState(false);
-
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
@@ -46,68 +43,6 @@ const Home = () => {
 
     fetchHomeData();
   }, [addFlash]);
-
-  // Add a new useEffect for Google Translate initialization
-  useEffect(() => {
-    if (!translateInitialized && !loading) {
-      // Define Google Translate callback function if not already defined
-      if (!window.googleTranslateElementInit) {
-        window.googleTranslateElementInit = function() {
-          new window.google.translate.TranslateElement(
-            { pageLanguage: 'en' },
-            'google_translate_element'
-          );
-          
-          // Fix Google Translate styling issues
-          setTimeout(() => {
-            const comboBox = document.querySelector('.goog-te-combo');
-            if (comboBox) {
-              comboBox.style.cssText = `
-                display: block !important;
-                visibility: visible !important;
-                width: 100% !important;
-                height: auto !important;
-                background-color: white !important;
-                color: black !important;
-                padding: 8px !important;
-                margin: 8px auto !important;
-                border-radius: 4px !important;
-                border: 1px solid #4CAF50 !important;
-                font-size: 16px !important;
-                max-width: 250px !important;
-              `;
-            }
-            
-            // Fix body positioning
-            document.body.style.top = '0px';
-            document.body.style.position = 'static';
-            
-            // Hide Google Translate banner
-            const elements = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
-            elements.forEach(el => {
-              if (el) {
-                el.style.display = 'none';
-                el.style.visibility = 'hidden';
-              }
-            });
-          }, 300);
-        };
-      }
-      
-      // Load Google Translate script if it hasn't been loaded
-      if (!document.querySelector('script[src*="translate.google.com"]')) {
-        const script = document.createElement('script');
-        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        script.async = true;
-        document.head.appendChild(script);
-      } else if (window.google && window.google.translate) {
-        // If script is already loaded but not initialized
-        window.googleTranslateElementInit();
-      }
-      
-      setTranslateInitialized(true);
-    }
-  }, [loading, translateInitialized]);
 
   useEffect(() => {
     // Initialize Bootstrap carousel
@@ -138,19 +73,6 @@ const Home = () => {
   return (
     <div className="home-page">
       <ConnectionStatus />
-      
-      {/* Add Google Translate element container here */}
-      <div className="language-container bg-light py-3">
-        <div className="container d-flex justify-content-end">
-          <div className="language-selector-wrapper">
-            <div className="language-label d-flex align-items-center mb-2">
-              <i className="bi bi-translate me-2"></i>
-              <span>Translate to your language:</span>
-            </div>
-            <div id="google_translate_element" className="translate-element"></div>
-          </div>
-        </div>
-      </div>
       
       {/* Hero section */}
       <HeroSection />
