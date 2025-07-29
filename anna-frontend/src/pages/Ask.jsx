@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
@@ -14,6 +14,10 @@ const Ask = () => {
   });
   const [isListening1, setIsListening1] = useState(false);
   const [isListening2, setIsListening2] = useState(false);
+  
+  // References to store recognition instances
+  const recognition1Ref = useRef(null);
+  const recognition2Ref = useRef(null);
 
   const categories = [
     'Agricultural Commodity',
@@ -33,19 +37,20 @@ const Ask = () => {
     }));
   };
 
-  const startSpeechRecognition = (fieldName, setListening) => {
+  const startSpeechRecognition = (fieldName, setListening, recognitionRef) => {
     if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
       alert('Speech recognition is not supported in this browser. Please use Chrome or Edge for voice input.');
       return;
     }
 
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognitionRef.current = recognition;
     
     // Enhanced configuration for better accuracy
     recognition.lang = 'hi-IN'; // Hindi language support
     recognition.interimResults = false;
     recognition.maxAlternatives = 3; // Get multiple alternatives for better accuracy
-    recognition.continuous = false; // Single utterance
+    recognition.continuous = true; // Continuous listening until stopped
     
     setListening(true);
     
@@ -59,8 +64,8 @@ const Ask = () => {
     }
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      const confidence = event.results[0][0].confidence;
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      const confidence = event.results[event.results.length - 1][0].confidence;
       
       // Only use transcript if confidence is reasonable
       if (confidence > 0.3 || !confidence) { // Some browsers don't provide confidence
@@ -68,15 +73,13 @@ const Ask = () => {
           ...prev,
           [fieldName]: prev[fieldName] ? prev[fieldName] + ' ' + transcript : transcript
         }));
-      } else {
-        alert('Speech not clear. Please try speaking again.');
       }
-      setListening(false);
     };
 
     recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
       setListening(false);
+      recognitionRef.current = null;
       
       let errorMessage = 'Speech recognition error occurred.';
       switch(event.error) {
@@ -97,19 +100,29 @@ const Ask = () => {
 
     recognition.onend = () => {
       setListening(false);
+      recognitionRef.current = null;
     };
+  };
 
-    // Auto-stop after 10 seconds to prevent hanging
-    setTimeout(() => {
-      if (recognition) {
-        try {
-          recognition.stop();
-        } catch (error) {
-          console.error('Error stopping recognition:', error);
-        }
+  const stopSpeechRecognition = (setListening, recognitionRef) => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+        recognitionRef.current = null;
+        setListening(false);
+      } catch (error) {
+        console.error('Error stopping recognition:', error);
+        setListening(false);
       }
-      setListening(false);
-    }, 10000);
+    }
+  };
+
+  const toggleSpeechRecognition = (fieldName, isListening, setListening, recognitionRef) => {
+    if (isListening) {
+      stopSpeechRecognition(setListening, recognitionRef);
+    } else {
+      startSpeechRecognition(fieldName, setListening, recognitionRef);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -182,15 +195,14 @@ const Ask = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => startSpeechRecognition('question', setIsListening1)}
+                    onClick={() => toggleSpeechRecognition('question', isListening1, setIsListening1, recognition1Ref)}
                     className={`absolute right-3 top-1/2 transform -translate-y-1/2 px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                       isListening1 
                         ? 'bg-red-100 text-red-700 animate-pulse' 
                         : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                     }`}
-                    disabled={isListening1}
                   >
-                    {isListening1 ? '🎤 Listening...' : '🎤 Voice'}
+                    {isListening1 ? '🛑 Stop' : '🎤 Voice'}
                   </button>
                 </div>
               </div>
@@ -216,15 +228,14 @@ const Ask = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => startSpeechRecognition('description', setIsListening2)}
+                    onClick={() => toggleSpeechRecognition('description', isListening2, setIsListening2, recognition2Ref)}
                     className={`absolute right-3 top-3 px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                       isListening2 
                         ? 'bg-red-100 text-red-700 animate-pulse' 
                         : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                     }`}
-                    disabled={isListening2}
                   >
-                    {isListening2 ? '🎤 Listening...' : '🎤 Voice'}
+                    {isListening2 ? '🛑 Stop' : '🎤 Voice'}
                   </button>
                 </div>
               </div>
