@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import GoogleTranslate from '../Common/GoogleTranslate';
 
 const Navbar = () => {
   return (
@@ -46,7 +47,10 @@ const Navbar = () => {
           </div>
           
           {/* Auth Links */}
-          <div className="flex space-x-4">
+          <div className="flex items-center space-x-4">
+            {/* Google Translate */}
+            <GoogleTranslate />
+            
             <Link 
               to="/login" 
               className="bg-green-700 hover:bg-green-800 px-4 py-2 rounded transition-colors"
