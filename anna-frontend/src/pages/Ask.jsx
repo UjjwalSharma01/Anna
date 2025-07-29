@@ -46,11 +46,10 @@ const Ask = () => {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognitionRef.current = recognition;
     
-    // Enhanced configuration for better accuracy
-    recognition.lang = 'hi-IN'; // Hindi language support
+    // EXACT same configuration as legacy
+    recognition.lang = 'hi-IN'; // Set the language to Hindi (India)
     recognition.interimResults = false;
-    recognition.maxAlternatives = 3; // Get multiple alternatives for better accuracy
-    recognition.continuous = true; // Continuous listening until stopped
+    recognition.maxAlternatives = 1;
     
     setListening(true);
     
@@ -63,42 +62,31 @@ const Ask = () => {
       return;
     }
 
-    recognition.onresult = (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript;
-      const confidence = event.results[event.results.length - 1][0].confidence;
-      
-      // Only use transcript if confidence is reasonable
-      if (confidence > 0.3 || !confidence) { // Some browsers don't provide confidence
-        setFormData(prev => ({
-          ...prev,
-          [fieldName]: prev[fieldName] ? prev[fieldName] + ' ' + transcript : transcript
-        }));
-      }
+    // EXACT same result handling as legacy
+    recognition.onresult = function(event) {
+      // Get the recognized transcript and set it as the field value (REPLACE, not append)
+      const transcript = event.results[0][0].transcript;
+      setFormData(prev => ({
+        ...prev,
+        [fieldName]: transcript // REPLACE entire value like legacy
+      }));
+      setListening(false);
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = function(event) {
       console.error('Speech recognition error:', event.error);
       setListening(false);
       recognitionRef.current = null;
       
-      let errorMessage = 'Speech recognition error occurred.';
-      switch(event.error) {
-        case 'network':
-          errorMessage = 'Network error. Please check your connection.';
-          break;
-        case 'not-allowed':
-          errorMessage = 'Microphone access denied. Please allow microphone access.';
-          break;
-        case 'no-speech':
-          errorMessage = 'No speech detected. Please try again.';
-          break;
-        default:
-          errorMessage = 'Speech recognition error. Please try again.';
+      // Simple error handling like legacy
+      let errorMessage = 'Speech recognition error. Please try again.';
+      if (event.error === 'not-allowed') {
+        errorMessage = 'Microphone access denied. Please allow microphone access.';
       }
       alert(errorMessage);
     };
 
-    recognition.onend = () => {
+    recognition.onend = function() {
       setListening(false);
       recognitionRef.current = null;
     };
