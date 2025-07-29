@@ -1,0 +1,74 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { TOKEN_KEY, USER_DATA_KEY } from '../utils/constants';
+import { getFromStorage, setToStorage, removeFromStorage } from '../utils/helpers';
+
+// Create the context
+const AuthContext = createContext();
+
+// Export the context
+export { AuthContext };
+
+// Custom hook to use the auth context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
+// Auth provider component
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Check if user is logged in on app start
+  useEffect(() => {
+    const token = getFromStorage(TOKEN_KEY);
+    const userData = getFromStorage(USER_DATA_KEY);
+    
+    if (token && userData) {
+      setUser(userData);
+      setIsAuthenticated(true);
+    }
+    setIsLoading(false);
+  }, []);
+
+  // Login function
+  const login = (userData, token) => {
+    setToStorage(TOKEN_KEY, token);
+    setToStorage(USER_DATA_KEY, userData);
+    setUser(userData);
+    setIsAuthenticated(true);
+  };
+
+  // Logout function
+  const logout = () => {
+    removeFromStorage(TOKEN_KEY);
+    removeFromStorage(USER_DATA_KEY);
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+  // Update user data
+  const updateUser = (updatedUserData) => {
+    setToStorage(USER_DATA_KEY, updatedUserData);
+    setUser(updatedUserData);
+  };
+
+  const value = {
+    user,
+    isAuthenticated,
+    isLoading,
+    login,
+    logout,
+    updateUser,
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

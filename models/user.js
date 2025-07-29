@@ -11,6 +11,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    password: {
+        type: String,
+        // Not required because passport-local-mongoose might handle it
+    },
     location: {
         type: String,
     },

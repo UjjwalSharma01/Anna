@@ -7,9 +7,12 @@ const annadataController = require("../controllers/annadata.js");
 router.route("/")
 .get(wrapAsync(annadataController.index))
 
-
 router.route("/schemes")
 .get(wrapAsync(annadataController.schemes))
+
+// API VERSION: Schemes endpoint  
+router.route("/api/schemes")
+.get(wrapAsync(annadataController.schemesAPI))
 
 router.route("/forums")
 .get(wrapAsync(annadataController.renderForums))
