@@ -16,7 +16,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="text-2xl font-bold">
-            Anna
+            Annadata
           </Link>
           
           {/* Navigation Links */}
@@ -43,7 +43,7 @@ const Navbar = () => {
               to="/annadata" 
               className="hover:text-green-200 transition-colors"
             >
-              Anna Data
+              Farm Data
             </Link>
             <Link 
               to="/schemes" 

@@ -62,7 +62,7 @@ const NotFound = () => {
                   to={ROUTES.ANNADATA}
                   className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200"
                 >
-                  Anna Data
+                  Farm Data
                 </Link>
                 <Link
                   to={ROUTES.SCHEMES}
