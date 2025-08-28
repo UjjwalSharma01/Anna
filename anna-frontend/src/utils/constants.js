@@ -3,7 +3,7 @@ export const APP_NAME = process.env.REACT_APP_APP_NAME || 'Anna';
 export const APP_VERSION = process.env.REACT_APP_VERSION || '1.0.0';
 
 // API Configuration
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050/api';
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050';
 
 // Authentication
 export const TOKEN_KEY = 'authToken';

@@ -5,7 +5,7 @@ const authService = {
   // Login user
   login: async (credentials) => {
     try {
-      const response = await apiClient.post('/auth/login', credentials);
+      const response = await apiClient.post('/api/auth/login', credentials);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Login failed' };
@@ -15,7 +15,7 @@ const authService = {
   // Register user
   signup: async (userData) => {
     try {
-      const response = await apiClient.post('/auth/signup', userData);
+      const response = await apiClient.post('/api/auth/signup', userData);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Signup failed' };
@@ -25,7 +25,7 @@ const authService = {
   // Logout user
   logout: async () => {
     try {
-      const response = await apiClient.post('/auth/logout');
+      const response = await apiClient.post('/api/auth/logout');
       return response.data;
     } catch (error) {
       // Even if logout fails on server, we clear local storage

@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { API_BASE_URL, TOKEN_KEY } from '../utils/constants';
 
+// Debug logging
+console.log('🚀 API.js loaded - API_BASE_URL:', API_BASE_URL);
+console.log('🚀 API.js loaded - process.env.REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+
 // Create axios instance with default configuration
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

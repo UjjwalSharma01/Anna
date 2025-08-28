@@ -31,8 +31,14 @@ mongoose.connect("mongodb+srv://admin:1234@cluster0.vn9sblt.mongodb.net/")
 
 // CORS Configuration
 app.use(cors({
-    origin: true, // Allow all origins for development
-    credentials: true
+    origin: [
+        'https://improved-fiesta-x7g9g4qwwqg2v4pg-3000.app.github.dev',
+        'http://localhost:3000',
+        'http://localhost:3001'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 // JSON parsing middleware for API routes
@@ -258,16 +264,42 @@ app.get("/api/user/profile", authenticateJWT, async (req, res) => {
     }
 });
 
-// API Schemes endpoint
-app.get("/api/annadata/schemes", (req, res) => {
-    res.json({
-        message: "Schemes API endpoint",
-        data: {
-            government_schemes: ["PM-KISAN", "Soil Health Card", "Pradhan Mantri Fasal Bima Yojana"],
-            ngos: ["Akshaya Patra", "Smile Foundation", "HelpAge India"]
-        },
-        timestamp: new Date()
-    });
+// API Schemes Refresh endpoint - for manual data refresh
+app.post("/api/schemes/refresh", (req, res) => {
+    try {
+        // For now, return the same static data with updated timestamp
+        // External API integration will be added in next step
+        const refreshedData = {
+            government_schemes: [
+                "PM-KISAN", 
+                "Soil Health Card", 
+                "Pradhan Mantri Fasal Bima Yojana",
+                "Rashtriya Krishi Vikas Yojana",
+                "National Mission for Sustainable Agriculture"
+            ],
+            ngos: [
+                "Akshaya Patra", 
+                "Smile Foundation", 
+                "HelpAge India",
+                "Art of Living",
+                "Bharti Foundation"
+            ]
+        };
+        
+        res.json({
+            success: true,
+            message: "Schemes data refreshed successfully",
+            data: refreshedData,
+            lastUpdated: new Date(),
+            source: "manual_refresh"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error refreshing schemes data",
+            error: error.message
+        });
+    }
 });
 
 // API Dashboard/Index endpoint

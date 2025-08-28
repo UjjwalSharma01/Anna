@@ -5,7 +5,7 @@ const userService = {
   // Get current user profile
   getProfile: async () => {
     try {
-      const response = await apiClient.get('/user/profile');
+      const response = await apiClient.get('/api/auth/profile');
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Failed to fetch user profile' };
@@ -15,7 +15,7 @@ const userService = {
   // Update user profile
   updateProfile: async (profileData) => {
     try {
-      const response = await apiClient.put('/user/profile', profileData);
+      const response = await apiClient.put('/api/auth/profile', profileData);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Failed to update profile' };

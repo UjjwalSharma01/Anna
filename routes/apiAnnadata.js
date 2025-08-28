@@ -16,6 +16,19 @@ router.get("/statistics", authenticateToken, wrapAsync(apiAnnadataController.get
 // GET /api/annadata/user - Get current user's records (protected)
 router.get("/user", authenticateToken, wrapAsync(apiAnnadataController.getUserRecords));
 
+// GET /api/annadata/schemes - Get schemes data (public)
+router.get("/schemes", (req, res) => {
+    res.json({
+        success: true,
+        message: "Schemes API endpoint",
+        data: {
+            government_schemes: ["PM-KISAN", "Soil Health Card", "Pradhan Mantri Fasal Bima Yojana"],
+            ngos: ["Akshaya Patra", "Smile Foundation", "HelpAge India"]
+        },
+        timestamp: new Date()
+    });
+});
+
 // GET /api/annadata/:id - Get specific record (public)
 router.get("/:id", wrapAsync(apiAnnadataController.getRecord));
 

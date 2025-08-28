@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import schemesService from '../services/schemesService';
 
 const Schemes = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('schemes');
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshMessage, setRefreshMessage] = useState('');
 
   // Government Schemes Data
   const allSchemes = [
@@ -140,6 +143,36 @@ const Schemes = () => {
     window.open(link, '_blank');
   };
 
+  const handleRefresh = async () => {
+    console.log('🔄 Refresh button clicked!');
+    setRefreshing(true);
+    setRefreshMessage('');
+    
+    try {
+      console.log('📡 Calling schemesService.refreshSchemes()...');
+      const response = await schemesService.refreshSchemes();
+      console.log('✅ Response received:', response);
+      setRefreshMessage(`✅ Data refreshed successfully! Last updated: ${new Date(response.lastUpdated).toLocaleTimeString()}`);
+      
+      // Auto-clear message after 5 seconds
+      setTimeout(() => {
+        setRefreshMessage('');
+      }, 5000);
+      
+    } catch (error) {
+      console.error('❌ Error refreshing schemes:', error);
+      setRefreshMessage('❌ Failed to refresh data. Please try again.');
+      
+      // Auto-clear error message after 5 seconds
+      setTimeout(() => {
+        setRefreshMessage('');
+      }, 5000);
+    } finally {
+      setRefreshing(false);
+      console.log('🏁 Refresh process completed');
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -182,6 +215,41 @@ const Schemes = () => {
               🤝 NGOs & Organizations
             </button>
           </div>
+        </div>
+
+        {/* Refresh Button */}
+        <div className="flex flex-col items-center mb-6">
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className={`${
+              refreshing 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-600 hover:bg-blue-700'
+            } text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2`}
+          >
+            {refreshing ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                Refreshing...
+              </>
+            ) : (
+              <>
+                🔄 Refresh Data
+              </>
+            )}
+          </button>
+          
+          {/* Refresh Message */}
+          {refreshMessage && (
+            <div className={`mt-3 px-4 py-2 rounded-lg text-sm font-medium ${
+              refreshMessage.startsWith('✅') 
+                ? 'bg-green-100 text-green-800 border border-green-200' 
+                : 'bg-red-100 text-red-800 border border-red-200'
+            }`}>
+              {refreshMessage}
+            </div>
+          )}
         </div>
 
         {/* Content Section */}

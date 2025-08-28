@@ -100,8 +100,14 @@ const CombinedAuth = () => {
         // Navigate to home
         navigate('/');
       } else {
-        // Signup
-        const response = await authService.signup(formData);
+        // Signup - transform username to name for API
+        const signupData = {
+          ...formData,
+          name: formData.username
+        };
+        delete signupData.username;
+        
+        const response = await authService.signup(signupData);
         
         // Auto-login after successful signup
         contextLogin(response.user, response.token);

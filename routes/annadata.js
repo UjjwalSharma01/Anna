@@ -14,6 +14,10 @@ router.route("/schemes")
 router.route("/api/schemes")
 .get(wrapAsync(annadataController.schemesAPI))
 
+// API VERSION: Refresh schemes endpoint
+router.route("/api/schemes/refresh")
+.post(wrapAsync(annadataController.refreshSchemesAPI))
+
 router.route("/forums")
 .get(wrapAsync(annadataController.renderForums))
 
