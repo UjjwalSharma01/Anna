@@ -1,8 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import GoogleTranslate from '../Common/GoogleTranslate';
 
 const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <nav className="bg-green-600 text-white shadow-lg">
       <div className="container mx-auto px-4">
@@ -51,18 +58,40 @@ const Navbar = () => {
             {/* Google Translate */}
             <GoogleTranslate />
             
-            <Link 
-              to="/login" 
-              className="bg-green-700 hover:bg-green-800 px-4 py-2 rounded transition-colors"
-            >
-              Login
-            </Link>
-            <Link 
-              to="/signup" 
-              className="bg-white text-green-600 hover:bg-gray-100 px-4 py-2 rounded transition-colors"
-            >
-              Sign Up
-            </Link>
+            {isAuthenticated ? (
+              <>
+                {/* User Profile Link */}
+                <Link 
+                  to="/profile" 
+                  className="hover:text-green-200 transition-colors"
+                >
+                  Welcome, {user?.name || user?.username || 'User'}
+                </Link>
+                
+                {/* Logout Button */}
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link 
+                  to="/login" 
+                  className="bg-green-700 hover:bg-green-800 px-4 py-2 rounded transition-colors"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/signup" 
+                  className="bg-white text-green-600 hover:bg-gray-100 px-4 py-2 rounded transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

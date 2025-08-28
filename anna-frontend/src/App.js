@@ -2,12 +2,14 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ErrorBoundary from './components/Common/ErrorBoundary';
+import ProtectedRoute from './components/Common/ProtectedRoute';
 import Navbar from './components/Layout/Navbar';
 import Home from './pages/Home';
 import Forum from './pages/Forum';
 import AnnaData from './pages/AnnaData';
 import Schemes from './pages/Schemes';
 import Ask from './pages/Ask';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 import CombinedAuth from './components/Auth/CombinedAuth';
 import './App.css';
@@ -27,6 +29,14 @@ function App() {
               <Route path="/annadata" element={<AnnaData />} />
               <Route path="/schemes" element={<Schemes />} />
               <Route path="/ask" element={<Ask />} />
+              <Route 
+                path="/profile" 
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

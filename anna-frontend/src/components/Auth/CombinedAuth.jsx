@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
 import { validateEmail, validatePassword, validateRequired } from '../../utils/helpers';
+import AuthRedirect from '../Common/AuthRedirect';
 
 const CombinedAuth = () => {
   const navigate = useNavigate();
@@ -123,7 +124,8 @@ const CombinedAuth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-400 to-blue-600">
+    <AuthRedirect>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-400 to-blue-600">
       <div className="relative w-96">
         {/* Error Message */}
         {error && (
@@ -291,6 +293,7 @@ const CombinedAuth = () => {
         </div>
       </div>
     </div>
+    </AuthRedirect>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import forumService from '../services/forumService';
 
 const Ask = () => {
   const navigate = useNavigate();
@@ -116,6 +117,9 @@ const Ask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    console.log('🔍 Current user from context:', user);
+    console.log('🔍 Token from localStorage:', localStorage.getItem('authToken'));
+    
     if (!formData.question.trim() || !formData.description.trim() || !formData.category) {
       alert('Please fill in all fields');
       return;
@@ -124,21 +128,31 @@ const Ask = () => {
     setLoading(true);
     
     try {
-      // Simulate API call for now
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // TODO: Replace with actual API call
-      console.log('Question submitted:', {
-        ...formData,
-        userId: user?.id,
-        timestamp: new Date().toISOString()
-      });
+      const postData = {
+        Question: formData.question.trim(),
+        Description: formData.description.trim(),
+        Category: formData.category
+      };
 
-      alert('Question posted successfully!');
-      navigate('/forum');
+      console.log('📤 Sending post data:', postData);
+      const response = await forumService.createPost(postData);
+      
+      if (response.success) {
+        alert('Question posted successfully!');
+        // Reset form
+        setFormData({
+          question: '',
+          description: '',
+          category: ''
+        });
+        // Navigate to forum page
+        navigate('/forum');
+      } else {
+        throw new Error(response.message || 'Failed to post question');
+      }
     } catch (error) {
       console.error('Error posting question:', error);
-      alert('Failed to post question. Please try again.');
+      alert(error.message || 'Failed to post question. Please try again.');
     } finally {
       setLoading(false);
     }

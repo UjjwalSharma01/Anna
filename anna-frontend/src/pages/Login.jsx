@@ -5,6 +5,7 @@ import authService from '../services/authService';
 import { validateEmail, validateRequired, getErrorMessage } from '../utils/helpers';
 import { ROUTES } from '../utils/constants';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import AuthRedirect from '../components/Common/AuthRedirect';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -68,10 +69,17 @@ const Login = () => {
     setSubmitError('');
     
     try {
+      console.log('🔐 Attempting login with:', { email: formData.email, password: '***' });
       const response = await authService.login(formData);
+      console.log('✅ Login response:', response);
+      console.log('🎫 Token received:', response.token ? response.token.substring(0, 20) + '...' : 'NO TOKEN');
+      console.log('👤 User data:', response.user);
+      
       login(response.user, response.token);
+      console.log('💾 Token stored, navigating to home...');
       navigate(ROUTES.HOME);
     } catch (error) {
+      console.error('❌ Login error:', error);
       setSubmitError(getErrorMessage(error));
     } finally {
       setIsLoading(false);
@@ -79,7 +87,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <AuthRedirect>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -164,6 +173,7 @@ const Login = () => {
         </form>
       </div>
     </div>
+    </AuthRedirect>
   );
 };
 

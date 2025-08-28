@@ -5,6 +5,7 @@ import authService from '../services/authService';
 import { validateEmail, validatePassword, validateRequired, getErrorMessage } from '../utils/helpers';
 import { ROUTES } from '../utils/constants';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import AuthRedirect from '../components/Common/AuthRedirect';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -94,7 +95,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <AuthRedirect>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -225,6 +227,7 @@ const Signup = () => {
         </form>
       </div>
     </div>
+    </AuthRedirect>
   );
 };
 

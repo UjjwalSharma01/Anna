@@ -5,9 +5,13 @@ const forumService = {
   // Get all forum posts
   getAllPosts: async () => {
     try {
+      console.log('🌐 Making API call to get all posts...');
       const response = await apiClient.get('/api/forum');
+      console.log('✅ API Response received:', response.data);
       return response.data;
     } catch (error) {
+      console.error('❌ Forum service error:', error);
+      console.error('❌ Error response:', error.response?.data);
       throw error.response?.data || { message: 'Failed to fetch forum posts' };
     }
   },
@@ -22,12 +26,16 @@ const forumService = {
     }
   },
 
-  // Create a new forum post
+    // Create a new forum post
   createPost: async (postData) => {
     try {
+      console.log('📝 Creating new post with data:', postData);
       const response = await apiClient.post('/api/forum', postData);
+      console.log('✅ Post created successfully:', response.data);
       return response.data;
     } catch (error) {
+      console.log('❌ Error creating post:', error);
+      console.log('❌ Error response:', error.response?.data);
       throw error.response?.data || { message: 'Failed to create forum post' };
     }
   },

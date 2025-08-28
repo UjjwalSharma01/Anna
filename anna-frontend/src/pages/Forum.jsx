@@ -3,59 +3,125 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import forumService from '../services/forumService';
 
 const Forum = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const postsPerPage = 6;
 
-  // Mock data for now - will be replaced with API calls
+  // Debug: Test API connection on component mount
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        // TODO: Replace with actual API call
-        const mockPosts = [
-          {
-            _id: '1',
-            author: { username: 'farmer_john', _id: 'user1' },
-            Category: 'Crop Management',
-            Question: 'How to improve wheat yield?',
-            Description: 'I am facing issues with wheat yield in my farm. The soil seems good but the output is lower than expected. Looking for advice on fertilizers and irrigation techniques.',
-            createdAt: new Date('2025-01-15T10:30:00Z')
-          },
-          {
-            _id: '2',
-            author: { username: 'green_thumb', _id: 'user2' },
-            Category: 'Pest Control',
-            Question: 'Organic pest control methods?',
-            Description: 'What are some effective organic methods to control pests in tomato plants? I want to avoid chemical pesticides.',
-            createdAt: new Date('2025-01-14T15:45:00Z')
-          },
-          {
-            _id: '3',
-            author: { username: 'soil_expert', _id: 'user3' },
-            Category: 'Soil Health',
-            Question: 'Soil pH testing recommendations?',
-            Description: 'Can anyone recommend good soil pH testing methods and what to do if the soil is too acidic?',
-            createdAt: new Date('2025-01-13T09:20:00Z')
-          }
-        ];
-        
-        // Simulate API delay
-        setTimeout(() => {
-          setPosts(mockPosts);
-          setLoading(false);
-        }, 1000);
-      } catch (err) {
-        setError('Failed to fetch forum posts');
-        setLoading(false);
+    console.log('🚀 Forum component mounted - starting debug tests');
+    console.log('🌐 API Base URL from constants:', process.env.REACT_APP_API_URL || 'http://localhost:5050');
+    testDirectAPICall();
+  }, []);
+
+  const testDirectAPICall = async () => {
+    try {
+      console.log('🧪 Testing direct API call...');
+      const response = await fetch('http://localhost:5050/api/forum');
+      const data = await response.json();
+      console.log('✅ Direct API call successful:', data);
+    } catch (error) {
+      console.error('❌ Direct API call failed:', error);
+    }
+  };
+
+  // Fetch posts from API
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  // Refresh posts when component becomes visible (e.g., when navigating back from Ask page)
+  useEffect(() => {
+    const handleFocus = () => {
+      // Refresh posts when the window gets focus (user returns to tab)
+      fetchPosts();
+    };
+
+    const handleVisibilityChange = () => {
+      // Refresh posts when page becomes visible
+      if (!document.hidden) {
+        fetchPosts();
       }
     };
 
-    fetchPosts();
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
+
+  const fetchPosts = async (pageNum = 1, append = false) => {
+    try {
+      console.log('🔄 Fetching posts - Page:', pageNum, 'Append:', append);
+      
+      if (!append) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+      
+      const response = await forumService.getAllPosts();
+      console.log('📥 Forum API Response:', response);
+      
+      if (response.success) {
+        const allPosts = response.data;
+        console.log('📝 Total posts from API:', allPosts.length);
+        
+        const startIndex = (pageNum - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        const paginatedPosts = allPosts.slice(startIndex, endIndex);
+        
+        console.log('📄 Paginated posts:', paginatedPosts.length, 'Start:', startIndex, 'End:', endIndex);
+        
+        if (append) {
+          setPosts(prevPosts => {
+            const newPosts = [...prevPosts, ...paginatedPosts];
+            console.log('➕ Appending posts - Total now:', newPosts.length);
+            return newPosts;
+          });
+        } else {
+          console.log('🔄 Setting initial posts:', paginatedPosts.length);
+          setPosts(paginatedPosts);
+        }
+        
+        // Check if there are more posts to load
+        setHasMore(endIndex < allPosts.length);
+        console.log('🔚 Has more posts:', endIndex < allPosts.length);
+      } else {
+        console.error('❌ API Error:', response.message);
+        setError(response.message || 'Failed to fetch forum posts');
+      }
+    } catch (err) {
+      console.error('💥 Error fetching posts:', err);
+      setError(err.message || 'Failed to fetch forum posts');
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const loadMorePosts = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchPosts(nextPage, true);
+  };
+
+  const refreshPosts = () => {
+    setPage(1);
+    setHasMore(true);
+    fetchPosts();
+  };
 
   const handlePostQuestion = () => {
     navigate('/ask');
@@ -99,14 +165,33 @@ const Forum = () => {
             <p className="text-gray-600">Share knowledge and get help from fellow farmers</p>
           </div>
           
-          <div className="text-center">
-            <p className="text-sm text-gray-500 mb-2">Have something to ask?</p>
+          <div className="flex items-center gap-3">
             <button
-              onClick={handlePostQuestion}
-              className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:from-green-700 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+              onClick={refreshPosts}
+              disabled={loading}
+              className="bg-white text-green-600 border-2 border-green-600 px-4 py-2 rounded-lg font-medium hover:bg-green-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              📝 Post a Question
+              {loading ? (
+                <div className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Refreshing...
+                </div>
+              ) : (
+                <>🔄 Refresh</>
+              )}
             </button>
+            <div className="text-center">
+              <p className="text-sm text-gray-500 mb-2">Have something to ask?</p>
+              <button
+                onClick={handlePostQuestion}
+                className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:from-green-700 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+              >
+                📝 Post a Question
+              </button>
+            </div>
           </div>
         </div>
 
@@ -230,10 +315,24 @@ const Forum = () => {
         )}
 
         {/* Load More Button */}
-        {posts.length > 0 && (
+        {posts.length > 0 && hasMore && (
           <div className="text-center mt-12">
-            <button className="bg-white text-green-600 border-2 border-green-600 px-8 py-3 rounded-lg font-medium hover:bg-green-50 transition-colors duration-200">
-              Load More Posts
+            <button 
+              onClick={loadMorePosts}
+              disabled={loadingMore}
+              className="bg-white text-green-600 border-2 border-green-600 px-8 py-3 rounded-lg font-medium hover:bg-green-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loadingMore ? (
+                <div className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Loading More...
+                </div>
+              ) : (
+                'Load More Posts'
+              )}
             </button>
           </div>
         )}
