@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import userService from '../services/userService';
+import { ROUTES } from '../utils/constants';
 
 const Profile = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, updateUser, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     location: '',
     land_area: '',
@@ -15,18 +22,61 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      const userData = {
-        username: user.username || '',
-        email: user.email || '',
-        location: user.location || '',
-        land_area: user.land_area || '',
-        income: user.income || ''
-      };
-      setProfileData(userData);
-      setFormData(userData);
+    // Debug: Check authentication state
+    console.log('🔍 Profile component mounted');
+    console.log('👤 User from context:', user);
+    console.log('� Is authenticated:', isAuthenticated);
+    console.log('�🔑 Token from localStorage:', localStorage.getItem('authToken'));
+    console.log('👤 User data from localStorage:', localStorage.getItem('userData'));
+    
+    // Redirect to login if not authenticated
+    if (!loading && !isAuthenticated) {
+      console.log('❌ User not authenticated, redirecting to login');
+      navigate(ROUTES.LOGIN);
+      return;
     }
-  }, [user]);
+    
+    // Only fetch profile if authenticated
+    if (isAuthenticated) {
+      fetchProfile();
+    }
+  }, [loading, isAuthenticated, navigate]);
+
+  const fetchProfile = async () => {
+    try {
+      setIsLoading(true);
+      console.log('🔍 Fetching profile data...');
+      const response = await userService.getProfile();
+      console.log('📋 Profile API response:', response);
+      const userData = response.user;
+      console.log('👤 User data from API:', userData);
+      
+      const profileInfo = {
+        name: userData.name || userData.username || '',
+        email: userData.email || '',
+        location: userData.location || '',
+        land_area: userData.land_area || '',
+        income: userData.income || ''
+      };
+      
+      console.log('🔧 Processed profile info:', profileInfo);
+      setProfileData(profileInfo);
+      setFormData(profileInfo);
+    } catch (error) {
+      console.error('❌ Error fetching profile:', error);
+      
+      // Handle specific authentication errors
+      if (error.message === 'Invalid token' || error.status === 401) {
+        console.log('🔒 Authentication error, redirecting to login');
+        navigate(ROUTES.LOGIN);
+        return;
+      }
+      
+      setError('Failed to load profile data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -40,23 +90,61 @@ const Profile = () => {
     if (isEditing) {
       // Reset form data if canceling edit
       setFormData(profileData);
+      setError('');
+      setSuccess('');
     }
     setIsEditing(!isEditing);
   };
 
   const handleSave = async () => {
-    // TODO: Implement API call to update profile
-    console.log('Saving profile data:', formData);
-    setProfileData(formData);
-    setIsEditing(false);
-    // Show success message
+    try {
+      setIsLoading(true);
+      setError('');
+      setSuccess('');
+      
+      console.log('💾 Saving profile data:', formData);
+      const response = await userService.updateProfile(formData);
+      console.log('✅ Profile update response:', response);
+      
+      const updatedProfile = {
+        name: response.user.name || response.user.username || '',
+        email: response.user.email || '',
+        location: response.user.location || '',
+        land_area: response.user.land_area || '',
+        income: response.user.income || ''
+      };
+      
+      console.log('🔄 Updated profile data:', updatedProfile);
+      setProfileData(updatedProfile);
+      setFormData(updatedProfile);
+      setIsEditing(false);
+      setSuccess('Profile updated successfully!');
+      
+      // Update the auth context with new user data
+      if (updateUser) {
+        updateUser(response.user);
+      }
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (error) {
+      console.error('❌ Error updating profile:', error);
+      setError(error.message || 'Failed to update profile');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  if (loading) {
-    return <LoadingSpinner />;
+  if (loading || isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-100 flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
-  if (!user) {
+  // Show login message if not authenticated
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-100 flex items-center justify-center relative overflow-hidden">
         {/* Animated Background Elements */}
@@ -65,14 +153,24 @@ const Profile = () => {
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-teal-300/20 to-emerald-300/20 rounded-full blur-xl animate-pulse delay-1000"></div>
         </div>
         
-        <div className="relative bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-12 text-center shadow-2xl">
+        <div className="relative bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-12 text-center shadow-2xl max-w-md">
           <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">No Profile Data</h2>
-          <p className="text-gray-600 text-lg">Please log in to view your profile.</p>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">
+            Authentication Required
+          </h2>
+          <p className="text-gray-600 text-lg mb-6">
+            Please log in to view your profile.
+          </p>
+          <button
+            onClick={() => navigate(ROUTES.LOGIN)}
+            className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          >
+            Go to Login
+          </button>
         </div>
       </div>
     );
@@ -109,7 +207,7 @@ const Profile = () => {
                   </div>
                   <div className="text-center md:text-left">
                     <h1 className="text-3xl font-bold text-white mb-2">
-                      {profileData?.username || 'Welcome User'}
+                      {profileData?.name || 'Welcome User'}
                     </h1>
                     <p className="text-emerald-100 text-lg">Manage your account information</p>
                   </div>
@@ -143,7 +241,30 @@ const Profile = () => {
             <div className="p-8">
               {isEditing ? (
                 // Edit Mode
-                <div className="space-y-8">
+                  <div className="space-y-8">
+                  {/* Success/Error Messages */}
+                  {success && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 animate-pulse">
+                      <div className="flex items-center">
+                        <svg className="w-5 h-5 text-green-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-green-700 font-medium">{success}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4 animate-pulse">
+                      <div className="flex items-center">
+                        <svg className="w-5 h-5 text-red-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-red-700 font-medium">{error}</span>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                       Edit Your Profile
@@ -154,16 +275,17 @@ const Profile = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="space-y-2 group">
                       <label className="block text-sm font-semibold text-gray-700 mb-2 group-hover:text-emerald-600 transition-colors">
-                        Username
+                        Name
                       </label>
                       <div className="relative">
                         <input
                           type="text"
-                          name="username"
-                          value={formData.username}
+                          name="name"
+                          value={formData.name}
                           onChange={handleInputChange}
                           className="w-full px-4 py-4 bg-white/50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 hover:shadow-md placeholder-gray-400"
-                          placeholder="Enter your username"
+                          placeholder="Enter your name"
+                          required
                         />
                         <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                           <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -303,11 +425,11 @@ const Profile = () => {
                           </svg>
                         </div>
                         <h3 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">
-                          Username
+                          Name
                         </h3>
                       </div>
                       <p className="text-xl font-bold text-gray-900">
-                        {profileData?.username || 'Not provided'}
+                        {profileData?.name || 'Not provided'}
                       </p>
                     </div>
                     

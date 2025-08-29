@@ -6,7 +6,7 @@ const { generateToken } = require('../utils/jwtUtils');
 const apiSignup = async (req, res) => {
   try {
     console.log('Signup request body:', req.body);
-    const { name, email, password } = req.body;
+    const { name, email, password, location, land_area, income } = req.body;
 
     // Validation
     if (!name || !email || !password) {
@@ -36,7 +36,10 @@ const apiSignup = async (req, res) => {
     const newUser = new User({
       username: name, // Map name to username for User model
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      location: location || undefined,
+      land_area: land_area || undefined,
+      income: income || undefined
     });
 
     await newUser.save();
@@ -53,7 +56,10 @@ const apiSignup = async (req, res) => {
       user: {
         id: newUser._id,
         name: newUser.username, // Map username back to name for frontend
-        email: newUser.email
+        email: newUser.email,
+        location: newUser.location,
+        land_area: newUser.land_area,
+        income: newUser.income
       }
     });
 
@@ -166,14 +172,29 @@ const apiLogout = async (req, res) => {
 const apiGetProfile = async (req, res) => {
   try {
     // User is already available from authenticateToken middleware
-    res.status(200).json({
+    console.log('🔍 Backend: Full user object from middleware:', req.user);
+    console.log('🔍 Backend: User toObject():', req.user.toObject ? req.user.toObject() : 'No toObject method');
+    console.log('🔍 Backend: User fields:');
+    console.log('  - location:', req.user.location);
+    console.log('  - land_area:', req.user.land_area);
+    console.log('  - income:', req.user.income);
+    
+    const responseData = {
       success: true,
       user: {
         id: req.user._id,
         name: req.user.username, // Map username to name for frontend
-        email: req.user.email
+        username: req.user.username,
+        email: req.user.email,
+        location: req.user.location,
+        land_area: req.user.land_area,
+        income: req.user.income
       }
-    });
+    };
+    
+    console.log('📤 Backend: Sending response:', responseData);
+    
+    res.status(200).json(responseData);
   } catch (error) {
     console.error('Get profile error:', error);
     res.status(500).json({
@@ -186,7 +207,7 @@ const apiGetProfile = async (req, res) => {
 // API: Update User Profile
 const apiUpdateProfile = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, location, land_area, income } = req.body;
     const userId = req.user._id;
 
     // Validation
@@ -210,20 +231,35 @@ const apiUpdateProfile = async (req, res) => {
       });
     }
 
+    // Prepare update data
+    const updateData = {
+      username: name, // Map name to username for the model
+      email
+    };
+
+    // Add optional fields if provided
+    if (location !== undefined) updateData.location = location;
+    if (land_area !== undefined) updateData.land_area = parseFloat(land_area) || 0;
+    if (income !== undefined) updateData.income = parseFloat(income) || 0;
+
     // Update user
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { name, email },
+      updateData,
       { new: true, runValidators: true }
-    ).select('-password');
+    ).select('-password -hash');
 
     res.status(200).json({
       success: true,
       message: 'Profile updated successfully',
       user: {
         id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email
+        name: updatedUser.username,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        location: updatedUser.location,
+        land_area: updatedUser.land_area,
+        income: updatedUser.income
       }
     });
 

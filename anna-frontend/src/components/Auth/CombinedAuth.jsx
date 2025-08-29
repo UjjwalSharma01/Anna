@@ -95,6 +95,11 @@ const CombinedAuth = () => {
           password: formData.password
         });
         
+        console.log('🔍 CombinedAuth: Login response received:', response);
+        console.log('👤 Response user:', response.user);
+        console.log('🎫 Response token:', response.token);
+        console.log('🎫 Token type:', typeof response.token);
+        
         // Update auth context
         contextLogin(response.user, response.token);
         

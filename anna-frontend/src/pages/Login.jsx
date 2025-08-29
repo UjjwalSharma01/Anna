@@ -62,7 +62,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    console.log('📝 Login form submitted');
+    console.log('📋 Form data:', { email: formData.email, password: '***' });
+    
     if (!validateForm()) {
+      console.log('❌ Form validation failed');
       return;
     }
     
@@ -76,9 +80,15 @@ const Login = () => {
       console.log('🎫 Token received:', response.token ? response.token.substring(0, 20) + '...' : 'NO TOKEN');
       console.log('👤 User data:', response.user);
       
-      login(response.user, response.token);
-      console.log('💾 Token stored, navigating to home...');
-      navigate(ROUTES.HOME);
+      if (response.success && response.token && response.user) {
+        console.log('✅ Login successful, calling login context function...');
+        login(response.user, response.token);
+        console.log('💾 Token stored, navigating to home...');
+        navigate(ROUTES.HOME);
+      } else {
+        console.error('❌ Invalid login response structure:', response);
+        setSubmitError('Login failed: Invalid response from server');
+      }
     } catch (error) {
       console.error('❌ Login error:', error);
       setSubmitError(getErrorMessage(error));

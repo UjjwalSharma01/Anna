@@ -37,10 +37,25 @@ export const AuthProvider = ({ children }) => {
 
   // Login function
   const login = (userData, token) => {
+    console.log('🔐 AuthContext: Login function called');
+    console.log('👤 User data to store:', userData);
+    console.log('🎫 Token to store:', token ? token.substring(0, 20) + '...' : 'NO TOKEN');
+    console.log('🎫 Token type:', typeof token);
+    console.log('🎫 Token full value:', token);
+    
     setToStorage(TOKEN_KEY, token);
     setToStorage(USER_DATA_KEY, userData);
+    
+    // Verify storage
+    const storedToken = getFromStorage(TOKEN_KEY);
+    const storedUser = getFromStorage(USER_DATA_KEY);
+    console.log('✅ Token stored verification:', storedToken ? storedToken.substring(0, 20) + '...' : 'FAILED TO STORE');
+    console.log('✅ User data stored verification:', storedUser);
+    
     setUser(userData);
     setIsAuthenticated(true);
+    
+    console.log('🎯 Auth state updated: authenticated =', true);
   };
 
   // Logout function

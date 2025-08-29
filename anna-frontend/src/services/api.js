@@ -15,7 +15,20 @@ const apiClient = axios.create({
 
 // Add request interceptor for auth token (will implement later)
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem(TOKEN_KEY);
+  console.log('🌐 API Request:', config.method?.toUpperCase(), config.url);
+  console.log('🌐 Full URL:', config.baseURL + config.url);
+  console.log('📦 Request data:', config.data);
+  
+  // Try to get token using the same method as the helpers
+  let token = null;
+  try {
+    const item = localStorage.getItem(TOKEN_KEY);
+    token = item ? JSON.parse(item) : null;
+  } catch (error) {
+    // If JSON.parse fails, try getting it as plain string
+    token = localStorage.getItem(TOKEN_KEY);
+  }
+  
   console.log('🔑 Token from localStorage:', token ? token.substring(0, 20) + '...' : 'NO TOKEN FOUND');
   console.log('🔑 Full token:', token);
   if (token) {
@@ -32,7 +45,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('authToken');
+      localStorage.removeItem(TOKEN_KEY);
       // Will redirect to login later
     }
     return Promise.reject(error);
