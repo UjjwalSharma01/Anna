@@ -68,6 +68,16 @@ const authService = {
     }
   },
 
+  // Delete user profile
+  deleteProfile: async () => {
+    try {
+      const response = await apiClient.delete('/api/auth/profile');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: 'Failed to delete profile' };
+    }
+  },
+
   // Verify token (check if token is still valid)
   verifyToken: async () => {
     try {

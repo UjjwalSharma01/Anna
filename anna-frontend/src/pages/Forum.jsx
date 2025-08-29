@@ -19,19 +19,8 @@ const Forum = () => {
   useEffect(() => {
     console.log('🚀 Forum component mounted - starting debug tests');
     console.log('🌐 API Base URL from constants:', process.env.REACT_APP_API_URL || 'http://localhost:5050');
-    testDirectAPICall();
+    // Removed direct API call - using forumService instead
   }, []);
-
-  const testDirectAPICall = async () => {
-    try {
-      console.log('🧪 Testing direct API call...');
-      const response = await fetch('http://localhost:5050/api/forum');
-      const data = await response.json();
-      console.log('✅ Direct API call successful:', data);
-    } catch (error) {
-      console.error('❌ Direct API call failed:', error);
-    }
-  };
 
   // Fetch posts from API
   useEffect(() => {
@@ -253,11 +242,11 @@ const Forum = () => {
                       <div className="flex items-center mb-2">
                         <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3">
                           <span className="text-white font-semibold text-sm">
-                            {post.author.username.charAt(0).toUpperCase()}
+                            {post.author?.username?.charAt(0).toUpperCase() || 'A'}
                           </span>
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900">{post.author.username}</p>
+                          <p className="font-semibold text-gray-900">{post.author?.username || 'Anonymous'}</p>
                         </div>
                       </div>
                       <div className="flex items-center">

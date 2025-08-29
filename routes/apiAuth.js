@@ -6,7 +6,8 @@ const {
   apiLogin,
   apiLogout,
   apiGetProfile,
-  apiUpdateProfile
+  apiUpdateProfile,
+  apiDeleteProfile
 } = require('../controllers/apiUser');
 
 // Public routes (no authentication required)
@@ -17,5 +18,6 @@ router.post('/login', apiLogin);
 router.post('/logout', authenticateToken, apiLogout);
 router.get('/profile', authenticateToken, apiGetProfile);
 router.put('/profile', authenticateToken, apiUpdateProfile);
+router.delete('/profile', authenticateToken, apiDeleteProfile);
 
 module.exports = router;

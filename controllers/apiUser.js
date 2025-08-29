@@ -272,10 +272,33 @@ const apiUpdateProfile = async (req, res) => {
   }
 };
 
+// API: Delete User Profile
+const apiDeleteProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Delete the user
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Profile deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('Delete profile error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error deleting profile'
+    });
+  }
+};
+
 module.exports = {
   apiSignup,
   apiLogin,
   apiLogout,
   apiGetProfile,
-  apiUpdateProfile
+  apiUpdateProfile,
+  apiDeleteProfile
 };
